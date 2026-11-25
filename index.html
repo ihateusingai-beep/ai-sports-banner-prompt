@@ -5,7 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>將軍澳培智學校 ｜ AI運動會 Banner 提詞器</title>
 <meta name="description" content="將軍澳培智學校 AI運動會 Banner 設計提詞器 — 教學引子 + 圖卡 wizard">
-<!-- MARKER: P0.5-PROMPT-EXPORT -->
+<!-- MARKER: F4.3-MUTE-TOGGLE -->
+<!-- PREV: F4.4-CUSTOM-SPEAK -->
+<!-- F4.3: mute toggle + localStorage -->
 <style>
   :root {
     --green: #16a34a;
@@ -61,6 +63,18 @@
     flex-shrink: 0; font-size: 0.65rem; font-weight: 700; padding: 0.2rem 0.5rem;
     border-radius: 999px; background: linear-gradient(135deg, var(--yellow-soft), #fde68a);
     color: #854d0e; border: 1px solid #facc15;
+  }
+  .school-header .mute-btn {
+    flex-shrink: 0; min-width: 44px; min-height: 40px; border-radius: 0.65rem;
+    border: 2px solid var(--line); background: #fff; color: var(--green-dark);
+    font-size: 1.15rem; font-weight: 800; cursor: pointer; padding: 0 0.45rem;
+  }
+  .school-header .mute-btn.on {
+    background: #fee2e2; border-color: #fca5a5; color: #991b1b;
+  }
+  body.speak-muted .speak-btn,
+  body.speak-muted .field-speak {
+    opacity: 0.45;
   }
 
   #app-main {
@@ -156,6 +170,17 @@
     font-size: var(--card-label); font-weight: 800; color: var(--green-dark);
     text-align: center; line-height: 1.2; word-break: break-word;
   }
+  .card .speak-btn {
+    position: absolute; left: 4px; top: 4px; z-index: 2;
+    width: 1.85rem; height: 1.85rem; border-radius: 50%;
+    border: 2px solid #86efac; background: #ecfdf5; color: #14532d;
+    font-size: 0.85rem; line-height: 1; padding: 0; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 1px 3px rgba(21,128,61,0.15);
+    user-select: none; -webkit-user-select: none;
+  }
+  .card .speak-btn:active { transform: scale(0.92); background: #bbf7d0; }
+  .card.disabled .speak-btn { pointer-events: auto; opacity: 1; filter: none; }
   .card .swatch {
     width: 70%; max-width: 72px; aspect-ratio: 1; border-radius: 0.65rem;
     border: 2px solid rgba(0,0,0,0.08); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.4);
@@ -177,6 +202,16 @@
     content: "再撳"; position: absolute; top: 4px; right: 4px;
     font-size: 0.65rem; font-weight: 800; color: #854d0e;
     background: #fde68a; padding: 0.1rem 0.35rem; border-radius: 999px;
+  }
+  .card.disabled {
+    opacity: 0.55; cursor: not-allowed; filter: grayscale(0.35);
+  }
+  .card.disabled .speak-btn {
+    opacity: 1; filter: none; cursor: pointer;
+  }
+  .orient-lock-hint {
+    text-align: center; font-size: 0.78rem; font-weight: 700; color: #a16207;
+    margin: 0.15rem 0 0.35rem; min-height: 1.1rem;
   }
   .multi-bar {
     flex: 0 0 auto; display: none; justify-content: center; margin-bottom: 0.35rem;
@@ -213,6 +248,18 @@
   }
   .field-wrap input[type="text"]:focus { border-color: #16a34a; box-shadow: 0 0 0 3px rgba(34,197,94,0.25); }
   .field-wrap .field-hint { margin-top: 0.25rem; font-size: 0.78rem; font-weight: 600; color: #3f6212; text-align: center; }
+  .field-row {
+    display: flex; align-items: center; gap: 0.45rem;
+  }
+  .field-row input[type="text"] { flex: 1; min-width: 0; }
+  .field-speak {
+    flex: 0 0 auto; width: 48px; height: 48px; border-radius: 0.75rem;
+    border: 2px solid #86efac; background: #ecfdf5; color: #14532d;
+    font-size: 1.25rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 1px 3px rgba(21,128,61,0.12);
+  }
+  .field-speak:active { transform: scale(0.95); background: #bbf7d0; }
+  .field-speak:disabled { opacity: 0.45; cursor: not-allowed; }
 
   /* Result step 8 */
   .result-wrap {
@@ -295,7 +342,8 @@
       <div class="school-zh">將軍澳培智學校</div>
       <div class="app-title">AI運動會 Banner 提詞器</div>
     </div>
-    <span class="badge" id="buildBadge">P0.5</span>
+    <span class="badge" id="buildBadge">F4.3</span>
+    <button type="button" class="mute-btn" id="btnMute" aria-pressed="false" aria-label="靜音開關" title="靜音">🔊</button>
   </header>
 
   <main id="app-main" role="main">
@@ -336,19 +384,16 @@
         <div id="wiz-hint"></div>
       </div>
       <div id="wiz-dots" aria-hidden="true"></div>
-      <div class="multi-bar" id="multiBar">
-        <button type="button" id="btnMulti" aria-pressed="false">多選（最多2）</button>
-      </div>
       <div id="wiz-body">
         <div class="wiz-panel" data-step="1" id="panel-1"><h2>主題故事</h2><p class="hint">揀一個故事</p><div class="card-grid" id="grid-1"></div></div>
-        <div class="wiz-panel" data-step="2" id="panel-2"><h2>人物角色</h2><p class="hint">邊啲人出現？</p><div class="card-grid" id="grid-2"></div></div>
+        <div class="wiz-panel" data-step="2" id="panel-2"><h2>人物角色</h2><p class="hint">可揀 1–3 個（撳加 · 再撳減）</p><div class="card-grid" id="grid-2"></div></div>
         <div class="wiz-panel" data-step="3" id="panel-3"><h2>場景環境</h2><p class="hint">喺邊度玩？</p><div class="card-grid" id="grid-3"></div></div>
         <div class="wiz-panel" data-step="4" id="panel-4"><h2>色彩氛圍</h2><p class="hint">可揀 1–2 種感覺</p><div class="card-grid" id="grid-4"></div></div>
-        <div class="wiz-panel" data-step="5" id="panel-5"><h2>AI 元素</h2><p class="hint">加啲科技感</p><div class="card-grid" id="grid-5"></div></div>
+        <div class="wiz-panel" data-step="5" id="panel-5"><h2>AI 元素</h2><p class="hint">可揀 1–2 個（撳加 · 再撳減）</p><div class="card-grid" id="grid-5"></div></div>
         <div class="wiz-panel" data-step="6" id="panel-6"><h2>共融合作</h2><p class="hint">點樣一齊做？</p><div class="card-grid" id="grid-6"></div></div>
         <div class="wiz-panel" data-step="7" id="panel-7">
           <h2>文字同構圖</h2>
-          <p class="hint">揀標題 · 寫你嘅字 · 揀版面</p>
+          <p class="hint">標題 · 自訂字 · 先方向 · 後排位</p>
           <div class="text-step">
             <div class="text-block">
               <h3>① Banner 標題</h3>
@@ -356,12 +401,20 @@
             </div>
             <div class="field-wrap">
               <label for="customText">② 你想寫嘅字（可空）</label>
-              <input id="customText" type="text" maxlength="40" autocomplete="off" placeholder="例如：一齊加油 / 我哋嘅隊">
-              <div class="field-hint">學生自行輸入 · 最長 40 字</div>
+              <div class="field-row">
+                <input id="customText" type="text" maxlength="40" autocomplete="off" placeholder="例如：一齊加油 / 我哋嘅隊">
+                <button type="button" class="field-speak" id="btnSpeakCustom" aria-label="讀出自訂文字" title="聽">🔊</button>
+              </div>
+              <div class="field-hint">學生自行輸入 · 最長 40 字 · 撳 🔊 聽</div>
             </div>
             <div class="text-block">
-              <h3>③ 構圖</h3>
-              <div class="card-grid" id="grid-layout"></div>
+              <h3>③ 方向（先揀）</h3>
+              <div class="card-grid" id="grid-orient"></div>
+            </div>
+            <div class="text-block" id="placeBlock">
+              <h3>④ 排位</h3>
+              <div class="orient-lock-hint" id="orientLockHint">請先揀橫向或直向</div>
+              <div class="card-grid" id="grid-place"></div>
             </div>
           </div>
         </div>
@@ -398,7 +451,7 @@
 <script>
 (function () {
   'use strict';
-  // MARKER: P0.5-PROMPT-EXPORT
+  // MARKER: F4.3-MUTE-TOGGLE
 
   var TEACH_N = 3;
   var WIZ_N = 8;
@@ -418,7 +471,7 @@
       ]
     },
     {
-      key: 'who', title: '人物角色', mode: 'single+multi', max: 2,
+      key: 'who', title: '人物角色', mode: 'multi', max: 3,
       items: [
         { id: 'w1', emoji: '👧👦', zh: '男女同學', zhCn: '男女同学', en: 'cheerful schoolboys and schoolgirls' },
         { id: 'w2', emoji: '♿', zh: '輪椅同學', zhCn: '轮椅同学', en: 'a smiling student using a wheelchair' },
@@ -451,7 +504,7 @@
       ]
     },
     {
-      key: 'ai', title: 'AI 元素', mode: 'single+multi', max: 2,
+      key: 'ai', title: 'AI 元素', mode: 'multi', max: 2,
       items: [
         { id: 'a1', emoji: '🤖', zh: '圓機械人', zhCn: '圆机器人', en: 'cute round friendly robot' },
         { id: 'a2', emoji: '🤸', zh: '機械人運動', zhCn: '机器人运动', en: 'robots doing sports with children' },
@@ -482,13 +535,15 @@
     { id: 't5', emoji: '🚀', zh: '智趣創未來', zhCn: '智趣创未来', en: 'Inspiring Innovation for the Future' },
     { id: 't6', emoji: '🦁', zh: '同心燃未來', zhCn: '同心燃未来', en: 'Share our Love Keep our Passion' }
   ];
-  var LAYOUT_ITEMS = [
-    { id: 'l1', emoji: '⬆️', zh: '字在上', zhCn: '字在上', en: 'big title on top, people in center' },
-    { id: 'l2', emoji: '👥', zh: '人在中', zhCn: '人在中', en: 'people centered, balanced composition' },
-    { id: 'l3', emoji: '🤖', zh: '機械人兩旁', zhCn: '机器人两旁', en: 'robots on both sides, students in middle' },
-    { id: 'l4', emoji: '📄', zh: 'A4橫向', zhCn: 'A4横向', en: 'landscape A4 banner layout' },
-    { id: 'l5', emoji: '📱', zh: 'A4直向', zhCn: 'A4直向', en: 'portrait A4 poster layout' },
-    { id: 'l6', emoji: '⭐', zh: '大標題清楚', zhCn: '大标题清楚', en: 'clear large title, clean uncluttered layout' }
+  var ORIENT_ITEMS = [
+    { id: 'o1', emoji: '📄', zh: 'A4橫向', zhCn: 'A4横向', en: 'landscape A4 banner orientation' },
+    { id: 'o2', emoji: '📱', zh: 'A4直向', zhCn: 'A4直向', en: 'portrait A4 poster orientation' }
+  ];
+  var PLACE_ITEMS = [
+    { id: 'p1', emoji: '⬆️', zh: '字在上', zhCn: '字在上', en: 'big title on top, people in center' },
+    { id: 'p2', emoji: '👥', zh: '人在中', zhCn: '人在中', en: 'people centered, balanced composition' },
+    { id: 'p3', emoji: '🤖', zh: '機械人兩旁', zhCn: '机器人两旁', en: 'robots on both sides, students in middle' },
+    { id: 'p4', emoji: '⭐', zh: '大標題清楚', zhCn: '大标题清楚', en: 'clear large title, clean uncluttered layout' }
   ];
 
   var NEG_EN = 'violence, blood, dark horror, scary faces, realistic disability stigma, pity gaze, competitive ranking podium only winners, overcrowded tiny text wall, unreadable logos, complex UI screenshots, religious symbols, weapons, cigarettes, alcohol, NSFW, ugly distortion, extra limbs, low quality, watermark, photorealistic gore';
@@ -498,11 +553,10 @@
   var mode = 'teach';
   var teachSlide = 0;
   var wizStep = 1;
-  var multiOn = false;
   var pendingId = null;
   var pendingTag = null;
   var lang = 'zh';
-  var sel = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], title: [], layout: [] };
+  var sel = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], title: [], orient: [], place: [] };
   var customText = '';
   var lastPrompt = { zh: '', cn: '', en: '' };
 
@@ -512,8 +566,6 @@
   var elWizDots = document.getElementById('wiz-dots');
   var elStepLabel = document.getElementById('wiz-step-label');
   var elHint = document.getElementById('wiz-hint');
-  var elMultiBar = document.getElementById('multiBar');
-  var btnMulti = document.getElementById('btnMulti');
   var btnPrev = document.getElementById('btnPrev');
   var btnNext = document.getElementById('btnNext');
   var btnSkip = document.getElementById('btnSkip');
@@ -523,6 +575,15 @@
   var sumChips = document.getElementById('sumChips');
   var teachSlides = Array.prototype.slice.call(document.querySelectorAll('.teach-slide'));
   var toastTimer = null;
+  var yueVoice = null;
+  var yueVoiceReady = false;
+  var MUTE_KEY = 'ai_sports_banner_speak_muted';
+  var speakMuted = false;
+  try {
+    speakMuted = localStorage.getItem(MUTE_KEY) === '1';
+  } catch (eMute) {
+    speakMuted = false;
+  }
 
   function toast(msg) {
     toastEl.textContent = msg;
@@ -530,6 +591,110 @@
     clearTimeout(toastTimer);
     toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 1600);
   }
+
+  function pickYueVoice() {
+    if (!window.speechSynthesis) return null;
+    var list = window.speechSynthesis.getVoices() || [];
+    if (!list.length) return null;
+    var i, v;
+    // 1) zh-HK
+    for (i = 0; i < list.length; i++) {
+      v = list[i];
+      if (/zh[-_]?HK/i.test(v.lang) || /yue/i.test(v.lang) || /cantonese/i.test(v.name)) return v;
+    }
+    // 2) zh-TW
+    for (i = 0; i < list.length; i++) {
+      v = list[i];
+      if (/zh[-_]?TW/i.test(v.lang)) return v;
+    }
+    // 3) any zh
+    for (i = 0; i < list.length; i++) {
+      v = list[i];
+      if (/^zh/i.test(v.lang)) return v;
+    }
+    return null;
+  }
+
+  function refreshYueVoice() {
+    yueVoice = pickYueVoice();
+    yueVoiceReady = !!yueVoice;
+    return yueVoice;
+  }
+
+  if (window.speechSynthesis) {
+    refreshYueVoice();
+    window.speechSynthesis.onvoiceschanged = function () {
+      refreshYueVoice();
+    };
+  }
+
+  /** Speak Cantonese-ish short label. F4.1 core. */
+  function speakYue(text) {
+    var t = (text || '').toString().trim();
+    if (!t) return false;
+    if (speakMuted) {
+      toast('已靜音');
+      return false;
+    }
+    if (!window.speechSynthesis) {
+      toast('呢部機唔支援語音');
+      return false;
+    }
+    var voice = yueVoice || refreshYueVoice();
+    try { window.speechSynthesis.cancel(); } catch (e1) {}
+    var u = new SpeechSynthesisUtterance(t);
+    if (voice) {
+      u.voice = voice;
+      u.lang = voice.lang || 'zh-HK';
+    } else {
+      u.lang = 'zh-HK';
+      toast('呢部機唔支援粵語');
+    }
+    u.rate = 0.92;
+    u.pitch = 1;
+    u.volume = 1;
+    try {
+      window.speechSynthesis.speak(u);
+      return true;
+    } catch (e2) {
+      toast('發音失敗');
+      return false;
+    }
+  }
+
+  // expose for F4.2 / console smoke
+  window.__speakYue = speakYue;
+  window.__refreshYueVoice = refreshYueVoice;
+
+  function applyMuteUI() {
+    var btn = document.getElementById('btnMute');
+    document.body.classList.toggle('speak-muted', speakMuted);
+    if (btn) {
+      btn.classList.toggle('on', speakMuted);
+      btn.setAttribute('aria-pressed', speakMuted ? 'true' : 'false');
+      btn.textContent = speakMuted ? '🔇' : '🔊';
+      btn.title = speakMuted ? '已靜音（撳開聲）' : '開聲中（撳靜音）';
+      btn.setAttribute('aria-label', speakMuted ? '已靜音，撳開聲' : '開聲中，撳靜音');
+    }
+    if (speakMuted) {
+      try { window.speechSynthesis && window.speechSynthesis.cancel(); } catch (eC) {}
+    }
+  }
+
+  function setMuted(on) {
+    speakMuted = !!on;
+    try { localStorage.setItem(MUTE_KEY, speakMuted ? '1' : '0'); } catch (eS) {}
+    applyMuteUI();
+  }
+
+  var btnMute = document.getElementById('btnMute');
+  if (btnMute) {
+    btnMute.addEventListener('click', function () {
+      setMuted(!speakMuted);
+      toast(speakMuted ? '已靜音' : '已開聲');
+    });
+  }
+  applyMuteUI();
 
   function findItems(step, ids) {
     var conf = STEPS[step];
@@ -539,8 +704,11 @@
   function findTitle() {
     return TITLE_ITEMS.filter(function (it) { return sel.title.indexOf(it.id) !== -1; });
   }
-  function findLayout() {
-    return LAYOUT_ITEMS.filter(function (it) { return sel.layout.indexOf(it.id) !== -1; });
+  function findOrient() {
+    return ORIENT_ITEMS.filter(function (it) { return sel.orient.indexOf(it.id) !== -1; });
+  }
+  function findPlace() {
+    return PLACE_ITEMS.filter(function (it) { return sel.place.indexOf(it.id) !== -1; });
   }
 
   function joinZh(items, key) {
@@ -558,7 +726,8 @@
     var ai = findItems(5, sel[5]);
     var inc = findItems(6, sel[6]);
     var title = findTitle();
-    var layout = findLayout();
+    var orient = findOrient();
+    var place = findPlace();
     var ct = (customText || '').trim();
 
     var openZh = 'AI運動會共融Banner設計，A4，明亮正向，主流同學與SEN同學一齊參與，非競技為主。';
@@ -574,7 +743,8 @@
     if (inc.length) zhParts.push('共融：' + joinZh(inc, 'zh'));
     if (title.length) zhParts.push('標題文字：' + joinZh(title, 'zh') + '（清晰可讀）');
     if (ct) zhParts.push('學生自訂文字：' + ct);
-    if (layout.length) zhParts.push('構圖：' + joinZh(layout, 'zh'));
+    if (orient.length) zhParts.push('方向：' + joinZh(orient, 'zh'));
+    if (place.length) zhParts.push('排位：' + joinZh(place, 'zh'));
     zhParts.push('風格：可愛友善插畫、綠黃白主調、開心孩子、小機械人、心形星星、安全寬闊空間。畫面避免雜亂小字牆。');
 
     var cnParts = [openCn];
@@ -586,7 +756,8 @@
     if (inc.length) cnParts.push('共融：' + joinZh(inc, 'zhCn'));
     if (title.length) cnParts.push('标题文字：' + joinZh(title, 'zhCn') + '（清晰可读）');
     if (ct) cnParts.push('学生自订文字：' + ct);
-    if (layout.length) cnParts.push('构图：' + joinZh(layout, 'zhCn'));
+    if (orient.length) cnParts.push('方向：' + joinZh(orient, 'zhCn'));
+    if (place.length) cnParts.push('排位：' + joinZh(place, 'zhCn'));
     cnParts.push('风格：可爱友善插画、绿黄白主调、开心孩子、小机器人、心形星星、安全宽阔空间。画面避免杂乱小字墙。');
 
     var enParts = [openEn];
@@ -598,7 +769,8 @@
     if (inc.length) enParts.push('inclusion: ' + joinEn(inc));
     if (title.length) enParts.push('banner title text (clear readable): "' + joinEn(title) + '"');
     if (ct) enParts.push('student custom text on banner: "' + ct + '"');
-    if (layout.length) enParts.push('composition: ' + joinEn(layout));
+    if (orient.length) enParts.push('orientation: ' + joinEn(orient));
+    if (place.length) enParts.push('composition placement: ' + joinEn(place));
     enParts.push('style: cute friendly illustration, green yellow white palette, happy children, small robots, hearts and stars, safe open space, clean design, no cluttered tiny text wall.');
 
     lastPrompt.zh = zhParts.join('\n');
@@ -619,7 +791,8 @@
     addChip('', findItems(5, sel[5]));
     addChip('', findItems(6, sel[6]));
     addChip('', findTitle());
-    addChip('', findLayout());
+    addChip('', findOrient());
+    addChip('', findPlace());
     if ((customText || '').trim()) chips.push('字:' + customText.trim());
     sumChips.innerHTML = chips.map(function (c) { return '<span>' + c + '</span>'; }).join('');
 
@@ -697,6 +870,28 @@
     }
   }
 
+  function speakBtnHtml(label) {
+    var safe = String(label || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+    return '<span class="speak-btn" role="button" tabindex="0" data-speak="' + safe + '" aria-label="讀：' + safe + '" title="聽">🔊</span>';
+  }
+
+  function bindSpeakBtns(root) {
+    if (!root) return;
+    Array.prototype.forEach.call(root.querySelectorAll('.speak-btn'), function (btn) {
+      function fire(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+        var t = btn.getAttribute('data-speak') || '';
+        speakYue(t);
+      }
+      btn.addEventListener('click', fire);
+      btn.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') fire(e);
+      });
+    });
+  }
+
   function renderGrid(step) {
     var conf = STEPS[step];
     if (!conf) return;
@@ -710,53 +905,82 @@
         ? '<div class="swatch" style="background:' + it.css + '" aria-hidden="true"></div>'
         : '<div class="ce" aria-hidden="true">' + it.emoji + '</div>';
       html += '<button type="button" class="' + cls + '" data-id="' + it.id + '" data-step="' + step + '" aria-pressed="' + (isSel ? 'true' : 'false') + '">' +
-        media + '<div class="cl">' + it.zh + '</div></button>';
+        speakBtnHtml(it.zh) + media + '<div class="cl">' + it.zh + '</div></button>';
     });
     grid.innerHTML = html;
     Array.prototype.forEach.call(grid.querySelectorAll('.card'), function (btn) {
       btn.addEventListener('click', onCardClick);
     });
+    bindSpeakBtns(grid);
   }
 
-  function renderChoiceGrid(gridId, items, selectedIds, stepTag) {
+  function renderChoiceGrid(gridId, items, selectedIds, stepTag, locked) {
     var grid = document.getElementById(gridId);
     if (!grid) return;
     var html = '';
     items.forEach(function (it) {
       var isSel = selectedIds.indexOf(it.id) !== -1;
-      var isPend = pendingId === it.id && wizStep === 7 && pendingTag === stepTag;
-      var cls = 'card' + (isSel ? ' selected' : '') + (isPend ? ' pending' : '');
-      html += '<button type="button" class="' + cls + '" data-id="' + it.id + '" data-tag="' + stepTag + '" aria-pressed="' + (isSel ? 'true' : 'false') + '">' +
+      var isPend = !locked && pendingId === it.id && wizStep === 7 && pendingTag === stepTag;
+      var cls = 'card' + (isSel ? ' selected' : '') + (isPend ? ' pending' : '') + (locked ? ' disabled' : '');
+      html += '<button type="button" class="' + cls + '" data-id="' + it.id + '" data-tag="' + stepTag + '"' +
+        (locked ? ' aria-disabled="true" data-locked="1"' : '') +
+        ' aria-pressed="' + (isSel ? 'true' : 'false') + '">' +
+        speakBtnHtml(it.zh) +
         '<div class="ce" aria-hidden="true">' + it.emoji + '</div><div class="cl">' + it.zh + '</div></button>';
     });
     grid.innerHTML = html;
     Array.prototype.forEach.call(grid.querySelectorAll('.card'), function (btn) {
       btn.addEventListener('click', onStep7Card);
     });
+    bindSpeakBtns(grid);
   }
 
   function renderStep7() {
-    renderChoiceGrid('grid-title', TITLE_ITEMS, sel.title, 'title');
-    renderChoiceGrid('grid-layout', LAYOUT_ITEMS, sel.layout, 'layout');
+    var hasOrient = sel.orient.length > 0;
+    renderChoiceGrid('grid-title', TITLE_ITEMS, sel.title, 'title', false);
+    renderChoiceGrid('grid-orient', ORIENT_ITEMS, sel.orient, 'orient', false);
+    renderChoiceGrid('grid-place', PLACE_ITEMS, sel.place, 'place', !hasOrient);
+    var lockHint = document.getElementById('orientLockHint');
+    if (lockHint) {
+      lockHint.textContent = hasOrient ? '' : '請先揀橫向或直向';
+      lockHint.style.display = hasOrient ? 'none' : 'block';
+    }
     var inp = document.getElementById('customText');
     if (inp && inp.value !== customText) inp.value = customText;
+    if (typeof syncCustomSpeakBtn === 'function') syncCustomSpeakBtn();
   }
 
   function onStep7Card(e) {
     var btn = e.currentTarget;
+    if (btn.getAttribute('data-locked') === '1' || btn.classList.contains('disabled')) {
+      if (!(e.target && e.target.closest && e.target.closest('.speak-btn'))) {
+        toast('請先揀方向');
+      }
+      return;
+    }
+    if (btn.disabled) return;
     var id = btn.dataset.id;
     var tag = btn.dataset.tag;
     if (wizStep !== 7) return;
+    if (tag === 'place' && sel.orient.length === 0) {
+      toast('請先揀方向');
+      return;
+    }
     var list = sel[tag].slice();
     if (list.length === 1 && list[0] === id) {
       pendingId = null; pendingTag = null; renderStep7(); return;
     }
     if (pendingId === id && pendingTag === tag) {
+      var prev = sel[tag][0];
       sel[tag] = [id];
+      if (tag === 'orient' && prev && prev !== id) {
+        sel.place = [];
+      }
       pendingId = null; pendingTag = null;
       renderStep7(); syncNav(); return;
     }
-    pendingId = id; pendingTag = tag;
+    pendingId = id;
+    pendingTag = tag;
     renderStep7();
     toast('再撳一次確認');
   }
@@ -765,7 +989,6 @@
     var conf = STEPS[step];
     if (!conf) return 'none';
     if (conf.mode === 'multi') return 'multi';
-    if (conf.mode === 'single+multi') return multiOn ? 'multi' : 'single';
     return 'single';
   }
 
@@ -828,21 +1051,12 @@
     var conf = STEPS[wizStep];
     if (conf) {
       elHint.textContent = conf.title;
-      var allowMulti = conf.mode === 'single+multi';
-      elMultiBar.classList.toggle('show', allowMulti);
-      if (!allowMulti) multiOn = conf.mode === 'multi';
-      btnMulti.classList.toggle('on', multiOn && allowMulti);
-      btnMulti.setAttribute('aria-pressed', multiOn && allowMulti ? 'true' : 'false');
-      btnMulti.textContent = multiOn && allowMulti ? '多選中（最多2）' : '多選（最多2）';
       renderGrid(wizStep);
     } else if (wizStep === 7) {
       elHint.textContent = '文字同構圖';
-      elMultiBar.classList.remove('show');
-      multiOn = false;
       renderStep7();
     } else if (wizStep === 8) {
       elHint.textContent = '提詞完成';
-      elMultiBar.classList.remove('show');
       renderResult();
     }
     syncNav();
@@ -854,7 +1068,6 @@
     elWizard.classList.add('active');
     btnSkip.style.display = 'none';
     elTeachDots.style.visibility = 'hidden';
-    multiOn = false;
     showWizStep(1);
   }
 
@@ -869,7 +1082,7 @@
 
   function canAdvanceWiz() {
     if (wizStep === 8) return true;
-    if (wizStep === 7) return sel.title.length > 0 && sel.layout.length > 0;
+    if (wizStep === 7) return sel.title.length > 0 && sel.orient.length > 0 && sel.place.length > 0;
     if (wizStep <= 6) return sel[wizStep] && sel[wizStep].length > 0;
     return false;
   }
@@ -896,16 +1109,6 @@
     }
   }
 
-  btnMulti.addEventListener('click', function () {
-    var conf = STEPS[wizStep];
-    if (!conf || conf.mode !== 'single+multi') return;
-    multiOn = !multiOn;
-    pendingId = null;
-    if (!multiOn && sel[wizStep].length > 1) sel[wizStep] = sel[wizStep].slice(0, 1);
-    showWizStep(wizStep);
-    toast(multiOn ? '多選已開（最多2）' : '改返單選');
-  });
-
   btnPrev.addEventListener('click', function () {
     if (mode === 'teach') { goTeach(teachSlide - 1); return; }
     if (wizStep <= 1) { backToTeach(); return; }
@@ -923,7 +1126,7 @@
       return;
     }
     if (!canAdvanceWiz()) {
-      toast(wizStep === 7 ? '請揀標題同構圖' : '請先揀至少一個');
+      toast(wizStep === 7 ? '請揀標題、方向同排位' : '請先揀至少一個');
       return;
     }
     showWizStep(wizStep + 1);
@@ -951,11 +1154,28 @@
   goTeach(0);
   for (var s = 1; s <= 6; s++) renderGrid(s);
   var customInput = document.getElementById('customText');
+  var btnSpeakCustom = document.getElementById('btnSpeakCustom');
+  function syncCustomSpeakBtn() {
+    if (!btnSpeakCustom) return;
+    var has = !!(customText || '').trim();
+    btnSpeakCustom.disabled = !has;
+  }
   if (customInput) {
     customInput.addEventListener('input', function () {
       customText = customInput.value.slice(0, 40);
+      syncCustomSpeakBtn();
     });
   }
+  if (btnSpeakCustom) {
+    btnSpeakCustom.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var t = (customText || (customInput && customInput.value) || '').trim();
+      if (!t) { toast('未有文字'); return; }
+      speakYue(t);
+    });
+  }
+  syncCustomSpeakBtn();
 })();
 </script>
 </body>
