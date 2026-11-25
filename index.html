@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>將軍澳培智學校 ｜ AI運動會 Banner 提詞器</title>
+<meta name="description" content="將軍澳培智學校 AI運動會 Banner 設計提詞器 — 教學引子 + 圖卡 wizard">
+<!-- MARKER: P0.5-PROMPT-EXPORT -->
+<style>
+  :root {
+    --green: #16a34a;
+    --green-dark: #15803d;
+    --yellow: #eab308;
+    --yellow-soft: #fef08a;
+    --ink: #14532d;
+    --ink-soft: #166534;
+    --line: #86efac;
+    --bg-top: #f0fdf4;
+    --bg-mid: #dcfce7;
+    --bg-bot: #fef9c3;
+    --safe-b: env(safe-area-inset-bottom, 0px);
+    --safe-t: env(safe-area-inset-top, 0px);
+    --header-h: 3.25rem;
+    --bottom-h: 4.25rem;
+    --touch: 48px;
+    --grid-min: 110px;
+    --card-emoji: 2.1rem;
+    --card-label: 0.95rem;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    height: 100%; height: 100dvh; overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", "PingFang TC",
+      "Microsoft JhengHei", "Heiti TC", sans-serif;
+    color: var(--ink);
+    background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 55%, var(--bg-bot) 100%);
+    -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+  }
+  body.app-shell { display: flex; flex-direction: column; max-width: 100vw; }
+
+  .school-header {
+    flex: 0 0 auto; display: flex; align-items: center; gap: 0.65rem;
+    padding: 0.45rem 0.75rem; padding-top: calc(0.45rem + var(--safe-t));
+    background: rgba(255,255,255,0.88); backdrop-filter: blur(8px);
+    border-bottom: 2px solid var(--line); min-height: var(--header-h); z-index: 20;
+  }
+  .school-header img.logo {
+    width: 40px; height: 40px; border-radius: 50%; background: #fff;
+    object-fit: contain; flex-shrink: 0; box-shadow: 0 1px 4px rgba(21,128,61,0.2);
+  }
+  .school-header .titles { min-width: 0; flex: 1; }
+  .school-header .school-zh {
+    font-size: 0.95rem; font-weight: 800; color: var(--green-dark); line-height: 1.15;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .school-header .app-title {
+    font-size: 0.78rem; font-weight: 700; color: var(--ink-soft); line-height: 1.2;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .school-header .badge {
+    flex-shrink: 0; font-size: 0.65rem; font-weight: 700; padding: 0.2rem 0.5rem;
+    border-radius: 999px; background: linear-gradient(135deg, var(--yellow-soft), #fde68a);
+    color: #854d0e; border: 1px solid #facc15;
+  }
+
+  #app-main {
+    flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column;
+    padding: 0.55rem 0.75rem 0.25rem; overflow: hidden;
+  }
+  .mode { display: none; flex: 1 1 auto; min-height: 0; flex-direction: column; }
+  .mode.active { display: flex; }
+
+  #teach-stage { flex: 1 1 auto; min-height: 0; position: relative; overflow: hidden; }
+  .teach-slide {
+    display: none; height: 100%; flex-direction: column; align-items: center;
+    justify-content: center; gap: 0.65rem; text-align: center; padding: 0.75rem 0.5rem;
+    background: rgba(255,255,255,0.6); border: 2px solid var(--line); border-radius: 1rem;
+    box-shadow: 0 4px 16px rgba(22,163,74,0.08);
+  }
+  .teach-slide.active { display: flex; animation: fadeIn .28s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .teach-slide .emoji { font-size: 3rem; line-height: 1; }
+  .teach-slide h2 { font-size: 1.3rem; font-weight: 800; color: var(--green-dark); }
+  .teach-slide p { font-size: 1.02rem; font-weight: 600; color: var(--ink-soft); line-height: 1.45; max-width: 26rem; }
+  .teach-slide .sub { font-size: 0.9rem; font-weight: 500; color: #3f6212; max-width: 26rem; }
+  .feel-grid {
+    display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 0.5rem;
+    width: 100%; max-width: 28rem; margin-top: 0.2rem;
+  }
+  .feel-card {
+    background: #fff; border: 2px solid var(--line); border-radius: 0.85rem;
+    padding: 0.65rem 0.35rem; display: flex; flex-direction: column; align-items: center; gap: 0.25rem; min-height: 5.2rem;
+  }
+  .feel-card .fe { font-size: 1.85rem; line-height: 1; }
+  .feel-card .fl { font-size: 0.95rem; font-weight: 800; color: var(--green-dark); }
+  .steps-preview { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.35rem; max-width: 30rem; }
+  .steps-preview span {
+    font-size: 0.78rem; font-weight: 700; padding: 0.28rem 0.55rem; border-radius: 999px;
+    background: #dcfce7; color: #166534; border: 1px solid #86efac;
+  }
+  #teach-dots { flex: 0 0 auto; display: flex; justify-content: center; gap: 0.45rem; padding: 0.4rem 0 0.1rem; }
+  #teach-dots button {
+    width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--green);
+    background: transparent; padding: 0; cursor: pointer;
+  }
+  #teach-dots button[aria-current="true"] { background: var(--green); transform: scale(1.15); }
+
+  #wiz-top {
+    flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between;
+    gap: 0.5rem; margin-bottom: 0.35rem;
+  }
+  #wiz-step-label { font-size: 1rem; font-weight: 800; color: var(--green-dark); }
+  #wiz-hint { font-size: 0.82rem; font-weight: 600; color: #3f6212; }
+  #wiz-dots {
+    flex: 0 0 auto; display: flex; flex-wrap: wrap; gap: 0.3rem; justify-content: center;
+    margin-bottom: 0.4rem;
+  }
+  #wiz-dots .dot {
+    min-width: 1.55rem; height: 1.55rem; border-radius: 999px; border: 2px solid var(--line);
+    background: #fff; color: var(--ink-soft); font-size: 0.7rem; font-weight: 800;
+    display: inline-flex; align-items: center; justify-content: center; padding: 0 0.25rem;
+  }
+  #wiz-dots .dot.on { background: #22c55e; border-color: #15803d; color: #fff; }
+  #wiz-dots .dot.done { background: #bbf7d0; border-color: #4ade80; color: #14532d; }
+
+  #wiz-body {
+    flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column;
+    background: rgba(255,255,255,0.55); border: 2px solid var(--line); border-radius: 1rem;
+    padding: 0.55rem; overflow: hidden;
+  }
+  .wiz-panel { display: none; flex: 1 1 auto; min-height: 0; flex-direction: column; }
+  .wiz-panel.active { display: flex; animation: fadeIn .22s ease; }
+  .wiz-panel h2 {
+    flex: 0 0 auto; font-size: 1.15rem; font-weight: 800; color: var(--green-dark);
+    margin-bottom: 0.15rem; text-align: center;
+  }
+  .wiz-panel .hint {
+    flex: 0 0 auto; text-align: center; font-size: 0.85rem; font-weight: 600;
+    color: #3f6212; margin-bottom: 0.4rem;
+  }
+  .card-grid {
+    flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(var(--grid-min), 1fr));
+    gap: 0.45rem; align-content: start; -webkit-overflow-scrolling: touch;
+  }
+  .card {
+    height: auto !important; background: #fff; border: 3px solid var(--line);
+    border-radius: 0.9rem; padding: 0.55rem 0.35rem 0.5rem; display: flex;
+    flex-direction: column; align-items: center; justify-content: flex-start; gap: 0.3rem;
+    cursor: pointer; font: inherit; color: inherit; position: relative;
+    box-shadow: 0 1px 3px rgba(22,163,74,0.08); transition: border-color .15s, transform .12s, background .15s;
+  }
+  .card:active { transform: scale(0.97); }
+  .card .ce { font-size: var(--card-emoji); line-height: 1; }
+  .card .cl {
+    font-size: var(--card-label); font-weight: 800; color: var(--green-dark);
+    text-align: center; line-height: 1.2; word-break: break-word;
+  }
+  .card .swatch {
+    width: 70%; max-width: 72px; aspect-ratio: 1; border-radius: 0.65rem;
+    border: 2px solid rgba(0,0,0,0.08); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.4);
+  }
+  .card.selected {
+    border-color: #16a34a; background: #f0fdf4;
+    box-shadow: 0 0 0 2px rgba(34,197,94,0.35);
+  }
+  .card.selected::after {
+    content: "✓"; position: absolute; top: 4px; right: 6px;
+    width: 1.25rem; height: 1.25rem; border-radius: 50%; background: #16a34a; color: #fff;
+    font-size: 0.75rem; font-weight: 900; display: flex; align-items: center; justify-content: center;
+  }
+  .card.pending {
+    border-color: #eab308; background: #fefce8;
+    box-shadow: 0 0 0 2px rgba(234,179,8,0.35);
+  }
+  .card.pending::after {
+    content: "再撳"; position: absolute; top: 4px; right: 4px;
+    font-size: 0.65rem; font-weight: 800; color: #854d0e;
+    background: #fde68a; padding: 0.1rem 0.35rem; border-radius: 999px;
+  }
+  .multi-bar {
+    flex: 0 0 auto; display: none; justify-content: center; margin-bottom: 0.35rem;
+  }
+  .multi-bar.show { display: flex; }
+  .multi-bar button {
+    min-height: 40px; padding: 0.35rem 0.9rem; border-radius: 999px; border: 2px solid #facc15;
+    background: #fef08a; color: #854d0e; font: inherit; font-size: 0.9rem; font-weight: 800; cursor: pointer;
+  }
+  .multi-bar button.on { background: #eab308; color: #fff; border-color: #a16207; }
+
+  .text-step {
+    flex: 1 1 auto; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 0.55rem;
+    -webkit-overflow-scrolling: touch; padding-bottom: 0.25rem;
+  }
+  .text-block { flex: 0 0 auto; }
+  .text-block h3 {
+    font-size: 0.92rem; font-weight: 800; color: var(--green-dark); margin-bottom: 0.3rem; text-align: center;
+  }
+  .text-block .card-grid {
+    flex: 0 0 auto; min-height: 0; overflow: visible;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  }
+  .field-wrap {
+    background: #fff; border: 2px solid var(--line); border-radius: 0.85rem; padding: 0.55rem 0.65rem;
+  }
+  .field-wrap label {
+    display: block; font-size: 0.88rem; font-weight: 800; color: var(--green-dark); margin-bottom: 0.3rem; text-align: center;
+  }
+  .field-wrap input[type="text"] {
+    width: 100%; min-height: 48px; border: 2px solid #86efac; border-radius: 0.65rem;
+    padding: 0.45rem 0.65rem; font: inherit; font-size: 1.05rem; font-weight: 700;
+    color: var(--ink); background: #f0fdf4; outline: none;
+  }
+  .field-wrap input[type="text"]:focus { border-color: #16a34a; box-shadow: 0 0 0 3px rgba(34,197,94,0.25); }
+  .field-wrap .field-hint { margin-top: 0.25rem; font-size: 0.78rem; font-weight: 600; color: #3f6212; text-align: center; }
+
+  /* Result step 8 */
+  .result-wrap {
+    flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 0.4rem; overflow: hidden;
+  }
+  .sum-chips {
+    flex: 0 0 auto; display: flex; flex-wrap: wrap; gap: 0.3rem; justify-content: center;
+    max-height: 4.5rem; overflow-y: auto;
+  }
+  .sum-chips span {
+    font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 999px;
+    background: #dcfce7; border: 1px solid #86efac; color: #14532d;
+  }
+  .lang-tabs {
+    flex: 0 0 auto; display: flex; gap: 0.35rem; justify-content: center;
+  }
+  .lang-tabs button {
+    min-height: 40px; padding: 0.3rem 0.85rem; border-radius: 999px; border: 2px solid var(--line);
+    background: #fff; color: var(--green-dark); font: inherit; font-size: 0.9rem; font-weight: 800; cursor: pointer;
+  }
+  .lang-tabs button.on {
+    background: #16a34a; border-color: #15803d; color: #fff;
+  }
+  .prompt-box {
+    flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    background: #fff; border: 2px solid var(--line); border-radius: 0.85rem; padding: 0.65rem 0.75rem;
+    font-size: 0.88rem; font-weight: 600; line-height: 1.45; color: #14532d; white-space: pre-wrap; word-break: break-word;
+  }
+  .neg-box {
+    flex: 0 0 auto; max-height: 4.8rem; overflow-y: auto;
+    background: #fff7ed; border: 2px solid #fdba74; border-radius: 0.75rem; padding: 0.45rem 0.6rem;
+    font-size: 0.78rem; font-weight: 600; line-height: 1.35; color: #9a3412; white-space: pre-wrap;
+  }
+  .neg-box strong { display: block; margin-bottom: 0.15rem; font-size: 0.8rem; }
+  .copy-row {
+    flex: 0 0 auto; display: flex; gap: 0.4rem;
+  }
+  .copy-row button {
+    flex: 1; min-height: 44px; border-radius: 0.75rem; border: 2px solid transparent;
+    font: inherit; font-size: 0.95rem; font-weight: 800; cursor: pointer;
+  }
+  .btn-copy { background: linear-gradient(135deg,#22c55e,#16a34a); color: #fff; border-color: #15803d !important; }
+  .btn-copy-neg { background: #ffedd5; color: #9a3412; border-color: #fdba74 !important; }
+
+  #bottom-nav {
+    flex: 0 0 auto; display: flex; gap: 0.5rem;
+    padding: 0.5rem 0.75rem; padding-bottom: calc(0.55rem + var(--safe-b));
+    background: rgba(255,255,255,0.92); border-top: 2px solid var(--line);
+    min-height: var(--bottom-h); z-index: 30;
+  }
+  #bottom-nav button {
+    flex: 1; min-height: var(--touch); border-radius: 0.85rem; border: 2px solid transparent;
+    font: inherit; font-size: 1.05rem; font-weight: 800; cursor: pointer;
+  }
+  #bottom-nav button:disabled { opacity: 0.45; cursor: not-allowed; }
+  .btn-ghost { background: #fff; color: var(--green-dark); border-color: var(--line) !important; }
+  .btn-skip { background: #fef9c3; color: #854d0e; border-color: #facc15 !important; }
+  .btn-primary {
+    background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff;
+    border-color: #15803d !important; box-shadow: 0 2px 8px rgba(22,163,74,0.25);
+  }
+  #toast {
+    position: fixed; left: 50%; bottom: calc(var(--bottom-h) + 0.5rem); transform: translateX(-50%) translateY(8px);
+    background: #14532d; color: #fff; padding: 0.55rem 1rem; border-radius: 0.65rem;
+    font-size: 0.9rem; font-weight: 700; opacity: 0; pointer-events: none; transition: .2s; z-index: 50;
+    max-width: 90vw; text-align: center;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  footer.site-footer { display: none; }
+  @media (max-width: 420px) {
+    .feel-grid { grid-template-columns: 1fr; max-width: 16rem; }
+    .feel-card { min-height: 3.4rem; flex-direction: row; justify-content: center; gap: 0.5rem; }
+  }
+</style>
+</head>
+<body class="app-shell">
+  <header class="school-header" role="banner">
+    <img class="logo" src="assets/puichi-logo.png" alt="將軍澳培智學校校徽" width="40" height="40">
+    <div class="titles">
+      <div class="school-zh">將軍澳培智學校</div>
+      <div class="app-title">AI運動會 Banner 提詞器</div>
+    </div>
+    <span class="badge" id="buildBadge">P0.5</span>
+  </header>
+
+  <main id="app-main" role="main">
+    <section id="mode-teach" class="mode active" aria-label="教學引子">
+      <div id="teach-stage">
+        <article class="teach-slide active" data-slide="0">
+          <div class="emoji" aria-hidden="true">🏁🏅</div>
+          <h2>呢次比賽係咩？</h2>
+          <p>我哋設計 <strong>AI運動會 Banner</strong></p>
+          <p class="sub">A4 大 · 活動日會用你嘅設計</p>
+          <p class="sub">主題：一齊運動 · 共融 · AI</p>
+        </article>
+        <article class="teach-slide" data-slide="1">
+          <div class="emoji" aria-hidden="true">💛🤝</div>
+          <h2>要畫咩感覺？</h2>
+          <div class="feel-grid" role="list">
+            <div class="feel-card" role="listitem"><span class="fe">🎉</span><span class="fl">一起玩</span></div>
+            <div class="feel-card" role="listitem"><span class="fe">🤲</span><span class="fl">互相幫助</span></div>
+            <div class="feel-card" role="listitem"><span class="fe">🤖</span><span class="fl">AI 一齊</span></div>
+          </div>
+        </article>
+        <article class="teach-slide" data-slide="2">
+          <div class="emoji" aria-hidden="true">🧭✨</div>
+          <h2>8 步設計</h2>
+          <p class="sub">跟住圖卡一步步揀就得</p>
+          <div class="steps-preview" aria-hidden="true">
+            <span>1 故事</span><span>2 人物</span><span>3 場景</span><span>4 顏色</span>
+            <span>5 AI</span><span>6 共融</span><span>7 文字</span><span>8 生成</span>
+          </div>
+        </article>
+      </div>
+      <div id="teach-dots" role="tablist" aria-label="教學頁"></div>
+    </section>
+
+    <section id="mode-wizard" class="mode" aria-label="提詞器">
+      <div id="wiz-top">
+        <div id="wiz-step-label">步驟 1／8</div>
+        <div id="wiz-hint"></div>
+      </div>
+      <div id="wiz-dots" aria-hidden="true"></div>
+      <div class="multi-bar" id="multiBar">
+        <button type="button" id="btnMulti" aria-pressed="false">多選（最多2）</button>
+      </div>
+      <div id="wiz-body">
+        <div class="wiz-panel" data-step="1" id="panel-1"><h2>主題故事</h2><p class="hint">揀一個故事</p><div class="card-grid" id="grid-1"></div></div>
+        <div class="wiz-panel" data-step="2" id="panel-2"><h2>人物角色</h2><p class="hint">邊啲人出現？</p><div class="card-grid" id="grid-2"></div></div>
+        <div class="wiz-panel" data-step="3" id="panel-3"><h2>場景環境</h2><p class="hint">喺邊度玩？</p><div class="card-grid" id="grid-3"></div></div>
+        <div class="wiz-panel" data-step="4" id="panel-4"><h2>色彩氛圍</h2><p class="hint">可揀 1–2 種感覺</p><div class="card-grid" id="grid-4"></div></div>
+        <div class="wiz-panel" data-step="5" id="panel-5"><h2>AI 元素</h2><p class="hint">加啲科技感</p><div class="card-grid" id="grid-5"></div></div>
+        <div class="wiz-panel" data-step="6" id="panel-6"><h2>共融合作</h2><p class="hint">點樣一齊做？</p><div class="card-grid" id="grid-6"></div></div>
+        <div class="wiz-panel" data-step="7" id="panel-7">
+          <h2>文字同構圖</h2>
+          <p class="hint">揀標題 · 寫你嘅字 · 揀版面</p>
+          <div class="text-step">
+            <div class="text-block">
+              <h3>① Banner 標題</h3>
+              <div class="card-grid" id="grid-title"></div>
+            </div>
+            <div class="field-wrap">
+              <label for="customText">② 你想寫嘅字（可空）</label>
+              <input id="customText" type="text" maxlength="40" autocomplete="off" placeholder="例如：一齊加油 / 我哋嘅隊">
+              <div class="field-hint">學生自行輸入 · 最長 40 字</div>
+            </div>
+            <div class="text-block">
+              <h3>③ 構圖</h3>
+              <div class="card-grid" id="grid-layout"></div>
+            </div>
+          </div>
+        </div>
+        <div class="wiz-panel" data-step="8" id="panel-8">
+          <h2>你的提詞</h2>
+          <p class="hint">揀語言 · 複製去 AI 出圖</p>
+          <div class="result-wrap">
+            <div class="sum-chips" id="sumChips" aria-label="已選摘要"></div>
+            <div class="lang-tabs" role="tablist">
+              <button type="button" class="on" data-lang="zh" id="tabZh">繁中</button>
+              <button type="button" data-lang="cn" id="tabCn">简中</button>
+              <button type="button" data-lang="en" id="tabEn">EN</button>
+            </div>
+            <div class="prompt-box" id="promptOut" role="textbox" aria-readonly="true"></div>
+            <div class="neg-box" id="negOut"><strong>Negative</strong><span id="negText"></span></div>
+            <div class="copy-row">
+              <button type="button" class="btn-copy" id="btnCopy">複製提詞</button>
+              <button type="button" class="btn-copy-neg" id="btnCopyNeg">複製 Negative</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav id="bottom-nav" aria-label="導航">
+    <button type="button" class="btn-ghost" id="btnPrev" disabled>上一步</button>
+    <button type="button" class="btn-skip" id="btnSkip">跳過教學</button>
+    <button type="button" class="btn-primary" id="btnNext">下一步</button>
+  </nav>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <footer class="site-footer"><p>將軍澳培智學校 · 電腦科</p></footer>
+
+<script>
+(function () {
+  'use strict';
+  // MARKER: P0.5-PROMPT-EXPORT
+
+  var TEACH_N = 3;
+  var WIZ_N = 8;
+  var WIZ_READY = 8;
+
+  var STEPS = [
+    null,
+    {
+      key: 'story', title: '主題故事', mode: 'single',
+      items: [
+        { id: 's1', emoji: '😄', zh: '一齊開心', zhCn: '一起开心', en: 'everyone happy together playing sports' },
+        { id: 's2', emoji: '🤝', zh: '互相幫助', zhCn: '互相帮助', en: 'students helping each other' },
+        { id: 's3', emoji: '🤖', zh: 'AI運動', zhCn: 'AI运动', en: 'doing sports with friendly AI robots' },
+        { id: 's4', emoji: '💪', zh: '勇敢試', zhCn: '勇敢尝试', en: 'bravely trying new sports challenges' },
+        { id: 's5', emoji: '🏆', zh: '合作完成', zhCn: '合作完成', en: 'cooperating to finish a challenge together' },
+        { id: 's6', emoji: '🌈', zh: '人人參與', zhCn: '人人参与', en: 'everyone can join, no one left out' }
+      ]
+    },
+    {
+      key: 'who', title: '人物角色', mode: 'single+multi', max: 2,
+      items: [
+        { id: 'w1', emoji: '👧👦', zh: '男女同學', zhCn: '男女同学', en: 'cheerful schoolboys and schoolgirls' },
+        { id: 'w2', emoji: '♿', zh: '輪椅同學', zhCn: '轮椅同学', en: 'a smiling student using a wheelchair' },
+        { id: 'w3', emoji: '🦯', zh: '手杖同學', zhCn: '手杖同学', en: 'a student with a walking aid' },
+        { id: 'w4', emoji: '🫂', zh: '手牽手', zhCn: '手牵手', en: 'students holding hands together' },
+        { id: 'w5', emoji: '🤖', zh: '小機械人', zhCn: '小机器人', en: 'a cute round smiling robot friend' },
+        { id: 'w6', emoji: '👩‍🏫', zh: '老師鼓勵', zhCn: '老师鼓励', en: 'a kind teacher cheering beside them' }
+      ]
+    },
+    {
+      key: 'scene', title: '場景環境', mode: 'single',
+      items: [
+        { id: 'c1', emoji: '🏫', zh: '學校操場', zhCn: '学校操场', en: 'school playground outdoor sports field' },
+        { id: 'c2', emoji: '🏟️', zh: '體育館', zhCn: '体育馆', en: 'bright indoor school gymnasium' },
+        { id: 'c3', emoji: '🌿', zh: '綠草地', zhCn: '绿草地', en: 'green grass field under clear sky' },
+        { id: 'c4', emoji: '📺', zh: '大螢幕', zhCn: '大屏幕', en: 'big friendly score screen with hearts' },
+        { id: 'c5', emoji: '🎈', zh: '氣球星星', zhCn: '气球星星', en: 'colorful balloons and stars decorations' },
+        { id: 'c6', emoji: '⚽', zh: '有器材', zhCn: '有器材', en: 'simple sports gear balls and balance tools' }
+      ]
+    },
+    {
+      key: 'color', title: '色彩氛圍', mode: 'multi', max: 2,
+      items: [
+        { id: 'k1', emoji: '', zh: '綠+黃', zhCn: '绿+黄', en: 'fresh green and sunny yellow palette', css: 'linear-gradient(135deg,#22c55e,#eab308)' },
+        { id: 'k2', emoji: '', zh: '藍+白', zhCn: '蓝+白', en: 'clean blue and white tech-fresh palette', css: 'linear-gradient(135deg,#38bdf8,#ffffff)' },
+        { id: 'k3', emoji: '', zh: '橙+綠', zhCn: '橙+绿', en: 'warm orange and cooperative green palette', css: 'linear-gradient(135deg,#fb923c,#22c55e)' },
+        { id: 'k4', emoji: '', zh: '明亮', zhCn: '明亮', en: 'bright colorful positive lively colors', css: 'linear-gradient(135deg,#f472b6,#facc15,#34d399)' },
+        { id: 'k5', emoji: '', zh: '溫柔', zhCn: '温柔', en: 'soft gentle warm safe pastel colors', css: 'linear-gradient(135deg,#fdba74,#bbf7d0)' },
+        { id: 'k6', emoji: '', zh: '白+綠', zhCn: '白+绿', en: 'white and green clean hopeful palette', css: 'linear-gradient(135deg,#ffffff,#86efac)' }
+      ]
+    },
+    {
+      key: 'ai', title: 'AI 元素', mode: 'single+multi', max: 2,
+      items: [
+        { id: 'a1', emoji: '🤖', zh: '圓機械人', zhCn: '圆机器人', en: 'cute round friendly robot' },
+        { id: 'a2', emoji: '🤸', zh: '機械人運動', zhCn: '机器人运动', en: 'robots doing sports with children' },
+        { id: 'a3', emoji: '💖', zh: '愛心螢幕', zhCn: '爱心屏幕', en: 'screen showing hearts and smiles' },
+        { id: 'a4', emoji: '🥽', zh: '可愛VR', zhCn: '可爱VR', en: 'cute friendly VR goggles' },
+        { id: 'a5', emoji: '📊', zh: '計分鼓勵', zhCn: '计分鼓励', en: 'AI helping with scores and cheers' },
+        { id: 'a6', emoji: '✨', zh: '簡單科技', zhCn: '简单科技', en: 'simple soft tech lines not complex' }
+      ]
+    },
+    {
+      key: 'include', title: '共融合作', mode: 'single',
+      items: [
+        { id: 'i1', emoji: '👥', zh: '混合一組', zhCn: '混合一组', en: 'mainstream and SEN students mixed in one team' },
+        { id: 'i2', emoji: '🤲', zh: '互相扶持', zhCn: '互相扶持', en: 'students supporting each other kindly' },
+        { id: 'i3', emoji: '🔁', zh: '一齊做', zhCn: '一起做', en: 'doing the same action together' },
+        { id: 'i4', emoji: '🌟', zh: '人人參與', zhCn: '人人参与', en: 'everyone participates, speed does not matter' },
+        { id: 'i5', emoji: '❤️', zh: '愛心握手', zhCn: '爱心握手', en: 'hearts stars handshake warm inclusion' },
+        { id: 'i6', emoji: '😁', zh: '好多笑容', zhCn: '很多笑容', en: 'lots of happy smiles and joy' }
+      ]
+    }
+  ];
+
+  var TITLE_ITEMS = [
+    { id: 't1', emoji: '🏅', zh: 'AI運動會', zhCn: 'AI运动会', en: 'AI Sports Day' },
+    { id: 't2', emoji: '💚', zh: '躍動共融愛', zhCn: '跃动共融爱', en: 'Dynamic Inclusion and Compassion' },
+    { id: 't3', emoji: '🎉', zh: '齊Fun共融賽', zhCn: '齐Fun共融赛', en: 'Fun Inclusive Games' },
+    { id: 't4', emoji: '♾️', zh: '運動無界限', zhCn: '运动无界限', en: 'Sports Without Limits' },
+    { id: 't5', emoji: '🚀', zh: '智趣創未來', zhCn: '智趣创未来', en: 'Inspiring Innovation for the Future' },
+    { id: 't6', emoji: '🦁', zh: '同心燃未來', zhCn: '同心燃未来', en: 'Share our Love Keep our Passion' }
+  ];
+  var LAYOUT_ITEMS = [
+    { id: 'l1', emoji: '⬆️', zh: '字在上', zhCn: '字在上', en: 'big title on top, people in center' },
+    { id: 'l2', emoji: '👥', zh: '人在中', zhCn: '人在中', en: 'people centered, balanced composition' },
+    { id: 'l3', emoji: '🤖', zh: '機械人兩旁', zhCn: '机器人两旁', en: 'robots on both sides, students in middle' },
+    { id: 'l4', emoji: '📄', zh: 'A4橫向', zhCn: 'A4横向', en: 'landscape A4 banner layout' },
+    { id: 'l5', emoji: '📱', zh: 'A4直向', zhCn: 'A4直向', en: 'portrait A4 poster layout' },
+    { id: 'l6', emoji: '⭐', zh: '大標題清楚', zhCn: '大标题清楚', en: 'clear large title, clean uncluttered layout' }
+  ];
+
+  var NEG_EN = 'violence, blood, dark horror, scary faces, realistic disability stigma, pity gaze, competitive ranking podium only winners, overcrowded tiny text wall, unreadable logos, complex UI screenshots, religious symbols, weapons, cigarettes, alcohol, NSFW, ugly distortion, extra limbs, low quality, watermark, photorealistic gore';
+  var NEG_ZH = '暴力、血腥、恐怖黑暗、可怕表情、歧視殘疾、可憐凝視、只得冠軍頒獎、密密麻麻字牆、難讀logo、複雜介面截圖、宗教符號、武器、香煙酒精、不雅、畸形、多餘肢體、低質、浮水印';
+  var NEG_CN = '暴力、血腥、恐怖黑暗、可怕表情、歧视残疾、可怜凝视、只有冠军颁奖、密密麻麻字墙、难读logo、复杂界面截图、宗教符号、武器、香烟酒精、不雅、畸形、多余肢体、低质、水印';
+
+  var mode = 'teach';
+  var teachSlide = 0;
+  var wizStep = 1;
+  var multiOn = false;
+  var pendingId = null;
+  var pendingTag = null;
+  var lang = 'zh';
+  var sel = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], title: [], layout: [] };
+  var customText = '';
+  var lastPrompt = { zh: '', cn: '', en: '' };
+
+  var elTeach = document.getElementById('mode-teach');
+  var elWizard = document.getElementById('mode-wizard');
+  var elTeachDots = document.getElementById('teach-dots');
+  var elWizDots = document.getElementById('wiz-dots');
+  var elStepLabel = document.getElementById('wiz-step-label');
+  var elHint = document.getElementById('wiz-hint');
+  var elMultiBar = document.getElementById('multiBar');
+  var btnMulti = document.getElementById('btnMulti');
+  var btnPrev = document.getElementById('btnPrev');
+  var btnNext = document.getElementById('btnNext');
+  var btnSkip = document.getElementById('btnSkip');
+  var toastEl = document.getElementById('toast');
+  var promptOut = document.getElementById('promptOut');
+  var negText = document.getElementById('negText');
+  var sumChips = document.getElementById('sumChips');
+  var teachSlides = Array.prototype.slice.call(document.querySelectorAll('.teach-slide'));
+  var toastTimer = null;
+
+  function toast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 1600);
+  }
+
+  function findItems(step, ids) {
+    var conf = STEPS[step];
+    if (!conf) return [];
+    return conf.items.filter(function (it) { return ids.indexOf(it.id) !== -1; });
+  }
+  function findTitle() {
+    return TITLE_ITEMS.filter(function (it) { return sel.title.indexOf(it.id) !== -1; });
+  }
+  function findLayout() {
+    return LAYOUT_ITEMS.filter(function (it) { return sel.layout.indexOf(it.id) !== -1; });
+  }
+
+  function joinZh(items, key) {
+    return items.map(function (it) { return it[key] || it.zh; }).join('、');
+  }
+  function joinEn(items) {
+    return items.map(function (it) { return it.en; }).join(', ');
+  }
+
+  function buildPrompts() {
+    var story = findItems(1, sel[1]);
+    var who = findItems(2, sel[2]);
+    var scene = findItems(3, sel[3]);
+    var color = findItems(4, sel[4]);
+    var ai = findItems(5, sel[5]);
+    var inc = findItems(6, sel[6]);
+    var title = findTitle();
+    var layout = findLayout();
+    var ct = (customText || '').trim();
+
+    var openZh = 'AI運動會共融Banner設計，A4，明亮正向，主流同學與SEN同學一齊參與，非競技為主。';
+    var openCn = 'AI运动会共融Banner设计，A4，明亮正向，主流同学与SEN同学一起参与，非竞技为主。';
+    var openEn = 'AI Sports Day inclusive banner design, A4 size, bright positive mood, mainstream and SEN students joining together, non-competitive team spirit.';
+
+    var zhParts = [openZh];
+    if (story.length) zhParts.push('故事：' + joinZh(story, 'zh'));
+    if (who.length) zhParts.push('人物：' + joinZh(who, 'zh'));
+    if (scene.length) zhParts.push('場景：' + joinZh(scene, 'zh'));
+    if (color.length) zhParts.push('色彩：' + joinZh(color, 'zh'));
+    if (ai.length) zhParts.push('AI元素：' + joinZh(ai, 'zh'));
+    if (inc.length) zhParts.push('共融：' + joinZh(inc, 'zh'));
+    if (title.length) zhParts.push('標題文字：' + joinZh(title, 'zh') + '（清晰可讀）');
+    if (ct) zhParts.push('學生自訂文字：' + ct);
+    if (layout.length) zhParts.push('構圖：' + joinZh(layout, 'zh'));
+    zhParts.push('風格：可愛友善插畫、綠黃白主調、開心孩子、小機械人、心形星星、安全寬闊空間。畫面避免雜亂小字牆。');
+
+    var cnParts = [openCn];
+    if (story.length) cnParts.push('故事：' + joinZh(story, 'zhCn'));
+    if (who.length) cnParts.push('人物：' + joinZh(who, 'zhCn'));
+    if (scene.length) cnParts.push('场景：' + joinZh(scene, 'zhCn'));
+    if (color.length) cnParts.push('色彩：' + joinZh(color, 'zhCn'));
+    if (ai.length) cnParts.push('AI元素：' + joinZh(ai, 'zhCn'));
+    if (inc.length) cnParts.push('共融：' + joinZh(inc, 'zhCn'));
+    if (title.length) cnParts.push('标题文字：' + joinZh(title, 'zhCn') + '（清晰可读）');
+    if (ct) cnParts.push('学生自订文字：' + ct);
+    if (layout.length) cnParts.push('构图：' + joinZh(layout, 'zhCn'));
+    cnParts.push('风格：可爱友善插画、绿黄白主调、开心孩子、小机器人、心形星星、安全宽阔空间。画面避免杂乱小字墙。');
+
+    var enParts = [openEn];
+    if (story.length) enParts.push('story: ' + joinEn(story));
+    if (who.length) enParts.push('characters: ' + joinEn(who));
+    if (scene.length) enParts.push('scene: ' + joinEn(scene));
+    if (color.length) enParts.push('colors: ' + joinEn(color));
+    if (ai.length) enParts.push('AI elements: ' + joinEn(ai));
+    if (inc.length) enParts.push('inclusion: ' + joinEn(inc));
+    if (title.length) enParts.push('banner title text (clear readable): "' + joinEn(title) + '"');
+    if (ct) enParts.push('student custom text on banner: "' + ct + '"');
+    if (layout.length) enParts.push('composition: ' + joinEn(layout));
+    enParts.push('style: cute friendly illustration, green yellow white palette, happy children, small robots, hearts and stars, safe open space, clean design, no cluttered tiny text wall.');
+
+    lastPrompt.zh = zhParts.join('\n');
+    lastPrompt.cn = cnParts.join('\n');
+    lastPrompt.en = enParts.join('\n');
+  }
+
+  function renderResult() {
+    buildPrompts();
+    var chips = [];
+    function addChip(label, items, key) {
+      items.forEach(function (it) { chips.push(label + it[key || 'zh']); });
+    }
+    addChip('', findItems(1, sel[1]));
+    addChip('', findItems(2, sel[2]));
+    addChip('', findItems(3, sel[3]));
+    addChip('', findItems(4, sel[4]));
+    addChip('', findItems(5, sel[5]));
+    addChip('', findItems(6, sel[6]));
+    addChip('', findTitle());
+    addChip('', findLayout());
+    if ((customText || '').trim()) chips.push('字:' + customText.trim());
+    sumChips.innerHTML = chips.map(function (c) { return '<span>' + c + '</span>'; }).join('');
+
+    promptOut.textContent = lastPrompt[lang] || lastPrompt.zh;
+    if (lang === 'cn') negText.textContent = NEG_CN;
+    else if (lang === 'en') negText.textContent = NEG_EN;
+    else negText.textContent = NEG_ZH;
+
+    Array.prototype.forEach.call(document.querySelectorAll('.lang-tabs button'), function (b) {
+      b.classList.toggle('on', b.getAttribute('data-lang') === lang);
+    });
+  }
+
+  function copyText(text, okMsg) {
+    if (!text) { toast('未有內容'); return; }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        toast(okMsg || '已複製');
+      }).catch(function () {
+        fallbackCopy(text, okMsg);
+      });
+    } else {
+      fallbackCopy(text, okMsg);
+    }
+  }
+
+  function fallbackCopy(text, okMsg) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+      toast(okMsg || '已複製');
+    } catch (err) {
+      toast('複製失敗');
+    }
+    document.body.removeChild(ta);
+  }
+
+  function buildTeachDots() {
+    elTeachDots.innerHTML = '';
+    for (var i = 0; i < TEACH_N; i++) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('aria-label', '教學第 ' + (i + 1) + ' 頁');
+      b.dataset.i = String(i);
+      b.addEventListener('click', function (e) {
+        if (mode !== 'teach') return;
+        goTeach(parseInt(e.currentTarget.dataset.i, 10));
+      });
+      elTeachDots.appendChild(b);
+    }
+  }
+
+  function goTeach(n) {
+    teachSlide = Math.max(0, Math.min(TEACH_N - 1, n));
+    teachSlides.forEach(function (s, i) { s.classList.toggle('active', i === teachSlide); });
+    Array.prototype.forEach.call(elTeachDots.children, function (d, i) {
+      d.setAttribute('aria-current', i === teachSlide ? 'true' : 'false');
+    });
+    syncNav();
+  }
+
+  function buildWizDots() {
+    elWizDots.innerHTML = '';
+    for (var i = 1; i <= WIZ_N; i++) {
+      var s = document.createElement('span');
+      s.className = 'dot';
+      s.textContent = String(i);
+      elWizDots.appendChild(s);
+    }
+  }
+
+  function renderGrid(step) {
+    var conf = STEPS[step];
+    if (!conf) return;
+    var grid = document.getElementById('grid-' + step);
+    var html = '';
+    conf.items.forEach(function (it) {
+      var isSel = sel[step].indexOf(it.id) !== -1;
+      var isPend = pendingId === it.id && step === wizStep;
+      var cls = 'card' + (isSel ? ' selected' : '') + (isPend ? ' pending' : '');
+      var media = it.css
+        ? '<div class="swatch" style="background:' + it.css + '" aria-hidden="true"></div>'
+        : '<div class="ce" aria-hidden="true">' + it.emoji + '</div>';
+      html += '<button type="button" class="' + cls + '" data-id="' + it.id + '" data-step="' + step + '" aria-pressed="' + (isSel ? 'true' : 'false') + '">' +
+        media + '<div class="cl">' + it.zh + '</div></button>';
+    });
+    grid.innerHTML = html;
+    Array.prototype.forEach.call(grid.querySelectorAll('.card'), function (btn) {
+      btn.addEventListener('click', onCardClick);
+    });
+  }
+
+  function renderChoiceGrid(gridId, items, selectedIds, stepTag) {
+    var grid = document.getElementById(gridId);
+    if (!grid) return;
+    var html = '';
+    items.forEach(function (it) {
+      var isSel = selectedIds.indexOf(it.id) !== -1;
+      var isPend = pendingId === it.id && wizStep === 7 && pendingTag === stepTag;
+      var cls = 'card' + (isSel ? ' selected' : '') + (isPend ? ' pending' : '');
+      html += '<button type="button" class="' + cls + '" data-id="' + it.id + '" data-tag="' + stepTag + '" aria-pressed="' + (isSel ? 'true' : 'false') + '">' +
+        '<div class="ce" aria-hidden="true">' + it.emoji + '</div><div class="cl">' + it.zh + '</div></button>';
+    });
+    grid.innerHTML = html;
+    Array.prototype.forEach.call(grid.querySelectorAll('.card'), function (btn) {
+      btn.addEventListener('click', onStep7Card);
+    });
+  }
+
+  function renderStep7() {
+    renderChoiceGrid('grid-title', TITLE_ITEMS, sel.title, 'title');
+    renderChoiceGrid('grid-layout', LAYOUT_ITEMS, sel.layout, 'layout');
+    var inp = document.getElementById('customText');
+    if (inp && inp.value !== customText) inp.value = customText;
+  }
+
+  function onStep7Card(e) {
+    var btn = e.currentTarget;
+    var id = btn.dataset.id;
+    var tag = btn.dataset.tag;
+    if (wizStep !== 7) return;
+    var list = sel[tag].slice();
+    if (list.length === 1 && list[0] === id) {
+      pendingId = null; pendingTag = null; renderStep7(); return;
+    }
+    if (pendingId === id && pendingTag === tag) {
+      sel[tag] = [id];
+      pendingId = null; pendingTag = null;
+      renderStep7(); syncNav(); return;
+    }
+    pendingId = id; pendingTag = tag;
+    renderStep7();
+    toast('再撳一次確認');
+  }
+
+  function stepMode(step) {
+    var conf = STEPS[step];
+    if (!conf) return 'none';
+    if (conf.mode === 'multi') return 'multi';
+    if (conf.mode === 'single+multi') return multiOn ? 'multi' : 'single';
+    return 'single';
+  }
+
+  function onCardClick(e) {
+    var btn = e.currentTarget;
+    var step = parseInt(btn.dataset.step, 10);
+    var id = btn.dataset.id;
+    if (step !== wizStep) return;
+    var conf = STEPS[step];
+    var m = stepMode(step);
+    var max = conf.max || 1;
+    var list = sel[step].slice();
+
+    if (m === 'multi') {
+      var idx = list.indexOf(id);
+      if (idx >= 0) list.splice(idx, 1);
+      else {
+        if (list.length >= max) { toast('最多揀 ' + max + ' 個'); return; }
+        list.push(id);
+      }
+      pendingId = null;
+      sel[step] = list;
+      renderGrid(step);
+      syncNav();
+      return;
+    }
+
+    if (list.length === 1 && list[0] === id) {
+      pendingId = null;
+      renderGrid(step);
+      return;
+    }
+    if (pendingId === id) {
+      sel[step] = [id];
+      pendingId = null;
+      renderGrid(step);
+      syncNav();
+      return;
+    }
+    pendingId = id;
+    renderGrid(step);
+    toast('再撳一次確認');
+  }
+
+  function showWizStep(n) {
+    wizStep = Math.max(1, Math.min(WIZ_N, n));
+    pendingId = null;
+    pendingTag = null;
+    Array.prototype.forEach.call(document.querySelectorAll('.wiz-panel'), function (p) {
+      var s = parseInt(p.getAttribute('data-step'), 10);
+      p.classList.toggle('active', s === wizStep);
+    });
+    Array.prototype.forEach.call(elWizDots.children, function (d, i) {
+      var step = i + 1;
+      d.classList.remove('on', 'done');
+      if (step === wizStep) d.classList.add('on');
+      else if (step < wizStep) d.classList.add('done');
+    });
+    elStepLabel.textContent = '步驟 ' + wizStep + '／' + WIZ_N;
+    var conf = STEPS[wizStep];
+    if (conf) {
+      elHint.textContent = conf.title;
+      var allowMulti = conf.mode === 'single+multi';
+      elMultiBar.classList.toggle('show', allowMulti);
+      if (!allowMulti) multiOn = conf.mode === 'multi';
+      btnMulti.classList.toggle('on', multiOn && allowMulti);
+      btnMulti.setAttribute('aria-pressed', multiOn && allowMulti ? 'true' : 'false');
+      btnMulti.textContent = multiOn && allowMulti ? '多選中（最多2）' : '多選（最多2）';
+      renderGrid(wizStep);
+    } else if (wizStep === 7) {
+      elHint.textContent = '文字同構圖';
+      elMultiBar.classList.remove('show');
+      multiOn = false;
+      renderStep7();
+    } else if (wizStep === 8) {
+      elHint.textContent = '提詞完成';
+      elMultiBar.classList.remove('show');
+      renderResult();
+    }
+    syncNav();
+  }
+
+  function enterWizard() {
+    mode = 'wizard';
+    elTeach.classList.remove('active');
+    elWizard.classList.add('active');
+    btnSkip.style.display = 'none';
+    elTeachDots.style.visibility = 'hidden';
+    multiOn = false;
+    showWizStep(1);
+  }
+
+  function backToTeach() {
+    mode = 'teach';
+    elWizard.classList.remove('active');
+    elTeach.classList.add('active');
+    btnSkip.style.display = '';
+    elTeachDots.style.visibility = '';
+    goTeach(teachSlide);
+  }
+
+  function canAdvanceWiz() {
+    if (wizStep === 8) return true;
+    if (wizStep === 7) return sel.title.length > 0 && sel.layout.length > 0;
+    if (wizStep <= 6) return sel[wizStep] && sel[wizStep].length > 0;
+    return false;
+  }
+
+  function syncNav() {
+    if (mode === 'teach') {
+      btnPrev.disabled = teachSlide === 0;
+      btnPrev.textContent = '上一步';
+      btnNext.disabled = false;
+      btnNext.textContent = teachSlide >= TEACH_N - 1 ? '開始設計' : '下一步';
+      return;
+    }
+    btnPrev.disabled = false;
+    btnPrev.textContent = wizStep === 1 ? '回教學' : '上一步';
+    if (wizStep === 8) {
+      btnNext.textContent = '完成';
+      btnNext.disabled = false;
+    } else if (wizStep === 7) {
+      btnNext.textContent = '生成提詞';
+      btnNext.disabled = !canAdvanceWiz();
+    } else {
+      btnNext.textContent = '下一步';
+      btnNext.disabled = !canAdvanceWiz();
+    }
+  }
+
+  btnMulti.addEventListener('click', function () {
+    var conf = STEPS[wizStep];
+    if (!conf || conf.mode !== 'single+multi') return;
+    multiOn = !multiOn;
+    pendingId = null;
+    if (!multiOn && sel[wizStep].length > 1) sel[wizStep] = sel[wizStep].slice(0, 1);
+    showWizStep(wizStep);
+    toast(multiOn ? '多選已開（最多2）' : '改返單選');
+  });
+
+  btnPrev.addEventListener('click', function () {
+    if (mode === 'teach') { goTeach(teachSlide - 1); return; }
+    if (wizStep <= 1) { backToTeach(); return; }
+    showWizStep(wizStep - 1);
+  });
+
+  btnNext.addEventListener('click', function () {
+    if (mode === 'teach') {
+      if (teachSlide >= TEACH_N - 1) { enterWizard(); return; }
+      goTeach(teachSlide + 1);
+      return;
+    }
+    if (wizStep === 8) {
+      toast('提詞已備好，可複製');
+      return;
+    }
+    if (!canAdvanceWiz()) {
+      toast(wizStep === 7 ? '請揀標題同構圖' : '請先揀至少一個');
+      return;
+    }
+    showWizStep(wizStep + 1);
+  });
+
+  btnSkip.addEventListener('click', function () { enterWizard(); });
+
+  Array.prototype.forEach.call(document.querySelectorAll('.lang-tabs button'), function (b) {
+    b.addEventListener('click', function () {
+      lang = b.getAttribute('data-lang');
+      renderResult();
+    });
+  });
+
+  document.getElementById('btnCopy').addEventListener('click', function () {
+    copyText(lastPrompt[lang] || lastPrompt.zh, '提詞已複製');
+  });
+  document.getElementById('btnCopyNeg').addEventListener('click', function () {
+    var n = lang === 'cn' ? NEG_CN : (lang === 'en' ? NEG_EN : NEG_ZH);
+    copyText(n, 'Negative 已複製');
+  });
+
+  buildTeachDots();
+  buildWizDots();
+  goTeach(0);
+  for (var s = 1; s <= 6; s++) renderGrid(s);
+  var customInput = document.getElementById('customText');
+  if (customInput) {
+    customInput.addEventListener('input', function () {
+      customText = customInput.value.slice(0, 40);
+    });
+  }
+})();
+</script>
+</body>
+</html>
