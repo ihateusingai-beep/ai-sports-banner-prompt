@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>將軍澳培智學校 ｜ AI運動會 Banner 提詞器</title>
 <meta name="description" content="將軍澳培智學校 AI運動會 Banner 設計提詞器 — 教學引子 + 圖卡 wizard">
-<!-- MARKER: G4-HINT-MAX3 -->
-<!-- PREV: G3-ART-STYLE-STEP -->
-<!-- G4: unify hints + color/AI max3 -->
+<!-- MARKER: S3-STYLE-IMG -->
+<!-- PREV: G4-HINT-MAX3 -->
+<!-- S3: style cards use img samples -->
 <style>
   :root {
     --green: #16a34a;
@@ -28,6 +28,7 @@
     --grid-min: 110px;
     --card-emoji: 2.1rem;
     --card-label: 0.95rem;
+    --card-img-max: 140px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
@@ -166,6 +167,14 @@
   }
   .card:active { transform: scale(0.97); }
   .card .ce { font-size: var(--card-emoji); line-height: 1; }
+  .card .card-media {
+    width: 100%; max-width: var(--card-img-max, 140px);
+    aspect-ratio: 1; border-radius: 0.65rem; overflow: hidden;
+    background: #f0fdf4; border: 1px solid #bbf7d0;
+  }
+  .card .card-media img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+  }
   .card .cl {
     font-size: var(--card-label); font-weight: 800; color: var(--green-dark);
     text-align: center; line-height: 1.2; word-break: break-word;
@@ -342,7 +351,7 @@
       <div class="school-zh">將軍澳培智學校</div>
       <div class="app-title">AI運動會 Banner 提詞器</div>
     </div>
-    <span class="badge" id="buildBadge">G4</span>
+    <span class="badge" id="buildBadge">S3</span>
     <button type="button" class="mute-btn" id="btnMute" aria-pressed="false" aria-label="靜音開關" title="靜音">🔊</button>
   </header>
 
@@ -452,7 +461,7 @@
 <script>
 (function () {
   'use strict';
-  // MARKER: G4-HINT-MAX3
+  // MARKER: S3-STYLE-IMG
 
   var TEACH_N = 3;
   var WIZ_N = 9;
@@ -529,17 +538,17 @@
     {
       key: 'style', title: '藝術風格', mode: 'multi', max: 3,
       items: [
-        { id: 'st1', emoji: '🍃', zh: '吉卜力風', zhCn: '吉卜力风', en: 'Studio Ghibli inspired soft pastel watercolor, warm gentle light' },
-        { id: 'st2', emoji: '😊', zh: '可愛插畫', zhCn: '可爱插画', en: 'cute friendly children illustration' },
-        { id: 'st3', emoji: '🎨', zh: '水彩溫柔', zhCn: '水彩温柔', en: 'soft gentle watercolor painting' },
-        { id: 'st4', emoji: '🧁', zh: '粉彩童趣', zhCn: '粉彩童趣', en: 'pastel kids picture-book style' },
-        { id: 'st5', emoji: '🪧', zh: '平面海報', zhCn: '平面海报', en: 'flat bold poster graphic design' },
-        { id: 'st6', emoji: '⬜', zh: '簡潔現代', zhCn: '简洁现代', en: 'clean modern simple graphic' },
-        { id: 'st7', emoji: '🖍️', zh: '蠟筆手繪', zhCn: '蜡笔手绘', en: 'crayon hand-drawn childlike style' },
-        { id: 'st8', emoji: '🧸', zh: '黏土公仔', zhCn: '粘土公仔', en: 'cute claymation clay figure look' },
-        { id: 'st9', emoji: '📄', zh: '紙藝剪貼', zhCn: '纸艺剪贴', en: 'paper-cut collage craft style' },
-        { id: 'st10', emoji: '✏️', zh: '漫畫線稿', zhCn: '漫画线稿', en: 'clean comic line art with soft color fill' },
-        { id: 'st11', emoji: '✨', zh: '柔光動畫', zhCn: '柔光动画', en: 'soft-light 2D animation still frame' }
+        { id: 'st1', emoji: '🍃', zh: '吉卜力風', zhCn: '吉卜力风', en: 'Studio Ghibli inspired soft pastel watercolor, warm gentle light', img: 'img/style/st1.jpg' },
+        { id: 'st2', emoji: '😊', zh: '可愛插畫', zhCn: '可爱插画', en: 'cute friendly children illustration', img: 'img/style/st2.jpg' },
+        { id: 'st3', emoji: '🎨', zh: '水彩溫柔', zhCn: '水彩温柔', en: 'soft gentle watercolor painting', img: 'img/style/st3.jpg' },
+        { id: 'st4', emoji: '🧁', zh: '粉彩童趣', zhCn: '粉彩童趣', en: 'pastel kids picture-book style', img: 'img/style/st4.jpg' },
+        { id: 'st5', emoji: '🪧', zh: '平面海報', zhCn: '平面海报', en: 'flat bold poster graphic design', img: 'img/style/st5.jpg' },
+        { id: 'st6', emoji: '⬜', zh: '簡潔現代', zhCn: '简洁现代', en: 'clean modern simple graphic', img: 'img/style/st6.jpg' },
+        { id: 'st7', emoji: '🖍️', zh: '蠟筆手繪', zhCn: '蜡笔手绘', en: 'crayon hand-drawn childlike style', img: 'img/style/st7.jpg' },
+        { id: 'st8', emoji: '🧸', zh: '黏土公仔', zhCn: '粘土公仔', en: 'cute claymation clay figure look', img: 'img/style/st8.jpg' },
+        { id: 'st9', emoji: '📄', zh: '紙藝剪貼', zhCn: '纸艺剪贴', en: 'paper-cut collage craft style', img: 'img/style/st9.jpg' },
+        { id: 'st10', emoji: '✏️', zh: '漫畫線稿', zhCn: '漫画线稿', en: 'clean comic line art with soft color fill', img: 'img/style/st10.jpg' },
+        { id: 'st11', emoji: '✨', zh: '柔光動畫', zhCn: '柔光动画', en: 'soft-light 2D animation still frame', img: 'img/style/st11.jpg' }
       ]
     }
   ];
@@ -923,9 +932,14 @@
       var isSel = sel[step].indexOf(it.id) !== -1;
       var isPend = pendingId === it.id && step === wizStep;
       var cls = 'card' + (isSel ? ' selected' : '') + (isPend ? ' pending' : '');
-      var media = it.css
-        ? '<div class="swatch" style="background:' + it.css + '" aria-hidden="true"></div>'
-        : '<div class="ce" aria-hidden="true">' + it.emoji + '</div>';
+      var media;
+      if (it.img) {
+        media = '<div class="card-media"><img src="' + it.img + '" alt="" loading="lazy" onerror="this.parentNode.outerHTML=\'<div class=ce aria-hidden=true>' + (it.emoji || '🎨') + '</div>\'"></div>';
+      } else if (it.css) {
+        media = '<div class="swatch" style="background:' + it.css + '" aria-hidden="true"></div>';
+      } else {
+        media = '<div class="ce" aria-hidden="true">' + it.emoji + '</div>';
+      }
       html += '<button type="button" class="' + cls + '" data-id="' + it.id + '" data-step="' + step + '" aria-pressed="' + (isSel ? 'true' : 'false') + '">' +
         speakBtnHtml(it.zh) + media + '<div class="cl">' + it.zh + '</div></button>';
     });
