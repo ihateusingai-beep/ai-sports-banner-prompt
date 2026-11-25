@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>將軍澳培智學校 ｜ AI運動會 Banner 提詞器</title>
 <meta name="description" content="將軍澳培智學校 AI運動會 Banner 設計提詞器 — 教學引子 + 圖卡 wizard">
-<!-- MARKER: V1-WHO-SCENE-INCLUDE-IMG -->
-<!-- PREV: S3-STYLE-IMG -->
-<!-- V1: who/scene/include JPG samples -->
+<!-- MARKER: V2-SPLIT-TEXT-LAYOUT -->
+<!-- PREV: V1-WHO-SCENE-INCLUDE-IMG -->
+<!-- V2: split text vs layout into two steps -->
 <style>
   :root {
     --green: #16a34a;
@@ -351,7 +351,7 @@
       <div class="school-zh">將軍澳培智學校</div>
       <div class="app-title">AI運動會 Banner 提詞器</div>
     </div>
-    <span class="badge" id="buildBadge">V1</span>
+    <span class="badge" id="buildBadge">V2</span>
     <button type="button" class="mute-btn" id="btnMute" aria-pressed="false" aria-label="靜音開關" title="靜音">🔊</button>
   </header>
 
@@ -376,11 +376,11 @@
         </article>
         <article class="teach-slide" data-slide="2">
           <div class="emoji" aria-hidden="true">🧭✨</div>
-          <h2>9 步設計</h2>
+          <h2>10 步設計</h2>
           <p class="sub">跟住圖卡一步步揀就得</p>
           <div class="steps-preview" aria-hidden="true">
             <span>1 故事</span><span>2 人物</span><span>3 場景</span><span>4 顏色</span>
-            <span>5 AI</span><span>6 共融</span><span>7 風格</span><span>8 文字</span><span>9 生成</span>
+            <span>5 AI</span><span>6 共融</span><span>7 風格</span><span>8 標題</span><span>9 構圖</span><span>10 生成</span>
           </div>
         </article>
       </div>
@@ -389,7 +389,7 @@
 
     <section id="mode-wizard" class="mode" aria-label="提詞器">
       <div id="wiz-top">
-        <div id="wiz-step-label">步驟 1／9</div>
+        <div id="wiz-step-label">步驟 1／10</div>
         <div id="wiz-hint"></div>
       </div>
       <div id="wiz-dots" aria-hidden="true"></div>
@@ -402,8 +402,8 @@
         <div class="wiz-panel" data-step="6" id="panel-6"><h2>共融合作</h2><p class="hint">可揀 1–3 個（撳加 · 再撳減）</p><div class="card-grid" id="grid-6"></div></div>
         <div class="wiz-panel" data-step="7" id="panel-7"><h2>藝術風格</h2><p class="hint">可揀 1–3 個（撳加 · 再撳減）</p><div class="card-grid" id="grid-7"></div></div>
         <div class="wiz-panel" data-step="8" id="panel-8">
-          <h2>文字同構圖</h2>
-          <p class="hint">標題可多選 · 自訂字 · 方向單選 · 排位單選</p>
+          <h2>標題同文字</h2>
+          <p class="hint">標題可多選 · 自訂字可空</p>
           <div class="text-step">
             <div class="text-block">
               <h3>① Banner 標題（可揀 1–3）</h3>
@@ -417,18 +417,24 @@
               </div>
               <div class="field-hint">學生自行輸入 · 最長 40 字 · 撳 🔊 聽</div>
             </div>
+          </div>
+        </div>
+        <div class="wiz-panel" data-step="9" id="panel-9">
+          <h2>方向同排位</h2>
+          <p class="hint">方向單選 · 先方向後排位</p>
+          <div class="text-step">
             <div class="text-block">
-              <h3>③ 方向（先揀）</h3>
+              <h3>① 方向（先揀）</h3>
               <div class="card-grid" id="grid-orient"></div>
             </div>
             <div class="text-block" id="placeBlock">
-              <h3>④ 排位</h3>
+              <h3>② 排位</h3>
               <div class="orient-lock-hint" id="orientLockHint">請先揀橫向或直向</div>
               <div class="card-grid" id="grid-place"></div>
             </div>
           </div>
         </div>
-        <div class="wiz-panel" data-step="9" id="panel-9">
+        <div class="wiz-panel" data-step="10" id="panel-10">
           <h2>你的提詞</h2>
           <p class="hint">揀語言 · 複製去 AI 出圖</p>
           <div class="result-wrap">
@@ -461,11 +467,11 @@
 <script>
 (function () {
   'use strict';
-  // MARKER: V1-WHO-SCENE-INCLUDE-IMG
+  // MARKER: V2-SPLIT-TEXT-LAYOUT
 
   var TEACH_N = 3;
-  var WIZ_N = 9;
-  var WIZ_READY = 9;
+  var WIZ_N = 10;
+  var WIZ_READY = 10;
 
   var STEPS = [
     null,
@@ -957,7 +963,7 @@
     var html = '';
     items.forEach(function (it) {
       var isSel = selectedIds.indexOf(it.id) !== -1;
-      var isPend = !locked && !isMultiTag && pendingId === it.id && wizStep === 8 && pendingTag === stepTag;
+      var isPend = !locked && !isMultiTag && pendingId === it.id && wizStep === 9 && pendingTag === stepTag;
       var cls = 'card' + (isSel ? ' selected' : '') + (isPend ? ' pending' : '') + (locked ? ' disabled' : '');
       html += '<button type="button" class="' + cls + '" data-id="' + it.id + '" data-tag="' + stepTag + '"' +
         (locked ? ' aria-disabled="true" data-locked="1"' : '') +
@@ -972,9 +978,15 @@
     bindSpeakBtns(grid);
   }
 
-  function renderStep7() {
-    var hasOrient = sel.orient.length > 0;
+  function renderStepText() {
     renderChoiceGrid('grid-title', TITLE_ITEMS, sel.title, 'title', false);
+    var inp = document.getElementById('customText');
+    if (inp && inp.value !== customText) inp.value = customText;
+    if (typeof syncCustomSpeakBtn === 'function') syncCustomSpeakBtn();
+  }
+
+  function renderStepLayout() {
+    var hasOrient = sel.orient.length > 0;
     renderChoiceGrid('grid-orient', ORIENT_ITEMS, sel.orient, 'orient', false);
     renderChoiceGrid('grid-place', PLACE_ITEMS, sel.place, 'place', !hasOrient);
     var lockHint = document.getElementById('orientLockHint');
@@ -982,9 +994,6 @@
       lockHint.textContent = hasOrient ? '' : '請先揀橫向或直向';
       lockHint.style.display = hasOrient ? 'none' : 'block';
     }
-    var inp = document.getElementById('customText');
-    if (inp && inp.value !== customText) inp.value = customText;
-    if (typeof syncCustomSpeakBtn === 'function') syncCustomSpeakBtn();
   }
 
   function onStep7Card(e) {
@@ -998,14 +1007,10 @@
     if (btn.disabled) return;
     var id = btn.dataset.id;
     var tag = btn.dataset.tag;
-    if (wizStep !== 8) return;
-    if (tag === 'place' && sel.orient.length === 0) {
-      toast('請先揀方向');
-      return;
-    }
 
-    // title = multi max 3 (toggle)
+    // title on step 8
     if (tag === 'title') {
+      if (wizStep !== 8) return;
       var tlist = sel.title.slice();
       var tidx = tlist.indexOf(id);
       if (tidx >= 0) tlist.splice(tidx, 1);
@@ -1016,15 +1021,21 @@
       pendingId = null;
       pendingTag = null;
       sel.title = tlist;
-      renderStep7();
+      renderStepText();
       syncNav();
       return;
     }
 
-    // orient / place = single two-tap
+    // orient / place on step 9
+    if (wizStep !== 9) return;
+    if (tag === 'place' && sel.orient.length === 0) {
+      toast('請先揀方向');
+      return;
+    }
+
     var list = sel[tag].slice();
     if (list.length === 1 && list[0] === id) {
-      pendingId = null; pendingTag = null; renderStep7(); return;
+      pendingId = null; pendingTag = null; renderStepLayout(); return;
     }
     if (pendingId === id && pendingTag === tag) {
       var prev = sel[tag][0];
@@ -1033,11 +1044,11 @@
         sel.place = [];
       }
       pendingId = null; pendingTag = null;
-      renderStep7(); syncNav(); return;
+      renderStepLayout(); syncNav(); return;
     }
     pendingId = id;
     pendingTag = tag;
-    renderStep7();
+    renderStepLayout();
     toast('再撳一次確認');
   }
 
@@ -1109,9 +1120,12 @@
       elHint.textContent = conf.title;
       renderGrid(wizStep);
     } else if (wizStep === 8) {
-      elHint.textContent = '文字同構圖';
-      renderStep7();
+      elHint.textContent = '標題同文字';
+      renderStepText();
     } else if (wizStep === 9) {
+      elHint.textContent = '方向同排位';
+      renderStepLayout();
+    } else if (wizStep === 10) {
       elHint.textContent = '提詞完成';
       renderResult();
     }
@@ -1137,8 +1151,9 @@
   }
 
   function canAdvanceWiz() {
-    if (wizStep === 9) return true;
-    if (wizStep === 8) return sel.title.length > 0 && sel.orient.length > 0 && sel.place.length > 0;
+    if (wizStep === 10) return true;
+    if (wizStep === 9) return sel.orient.length > 0 && sel.place.length > 0;
+    if (wizStep === 8) return sel.title.length > 0;
     if (wizStep <= 7) return sel[wizStep] && sel[wizStep].length > 0;
     return false;
   }
@@ -1153,10 +1168,10 @@
     }
     btnPrev.disabled = false;
     btnPrev.textContent = wizStep === 1 ? '回教學' : '上一步';
-    if (wizStep === 9) {
+    if (wizStep === 10) {
       btnNext.textContent = '完成';
       btnNext.disabled = false;
-    } else if (wizStep === 8) {
+    } else if (wizStep === 9) {
       btnNext.textContent = '生成提詞';
       btnNext.disabled = !canAdvanceWiz();
     } else {
@@ -1177,12 +1192,14 @@
       goTeach(teachSlide + 1);
       return;
     }
-    if (wizStep === 9) {
+    if (wizStep === 10) {
       toast('提詞已備好，可複製');
       return;
     }
     if (!canAdvanceWiz()) {
-      toast(wizStep === 8 ? '請揀標題、方向同排位' : '請先揀至少一個');
+      if (wizStep === 8) toast('請揀至少一個標題');
+      else if (wizStep === 9) toast('請揀方向同排位');
+      else toast('請先揀至少一個');
       return;
     }
     showWizStep(wizStep + 1);
