@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>將軍澳培智學校 ｜ AI運動會 Banner 提詞器</title>
 <meta name="description" content="將軍澳培智學校 AI運動會 Banner 設計提詞器 — 教學引子 + 圖卡 wizard">
-<!-- MARKER: F4.3-MUTE-TOGGLE -->
-<!-- PREV: F4.4-CUSTOM-SPEAK -->
-<!-- F4.3: mute toggle + localStorage -->
+<!-- MARKER: G4-HINT-MAX3 -->
+<!-- PREV: G3-ART-STYLE-STEP -->
+<!-- G4: unify hints + color/AI max3 -->
 <style>
   :root {
     --green: #16a34a;
@@ -342,7 +342,7 @@
       <div class="school-zh">將軍澳培智學校</div>
       <div class="app-title">AI運動會 Banner 提詞器</div>
     </div>
-    <span class="badge" id="buildBadge">F4.3</span>
+    <span class="badge" id="buildBadge">G4</span>
     <button type="button" class="mute-btn" id="btnMute" aria-pressed="false" aria-label="靜音開關" title="靜音">🔊</button>
   </header>
 
@@ -367,11 +367,11 @@
         </article>
         <article class="teach-slide" data-slide="2">
           <div class="emoji" aria-hidden="true">🧭✨</div>
-          <h2>8 步設計</h2>
+          <h2>9 步設計</h2>
           <p class="sub">跟住圖卡一步步揀就得</p>
           <div class="steps-preview" aria-hidden="true">
             <span>1 故事</span><span>2 人物</span><span>3 場景</span><span>4 顏色</span>
-            <span>5 AI</span><span>6 共融</span><span>7 文字</span><span>8 生成</span>
+            <span>5 AI</span><span>6 共融</span><span>7 風格</span><span>8 文字</span><span>9 生成</span>
           </div>
         </article>
       </div>
@@ -380,23 +380,24 @@
 
     <section id="mode-wizard" class="mode" aria-label="提詞器">
       <div id="wiz-top">
-        <div id="wiz-step-label">步驟 1／8</div>
+        <div id="wiz-step-label">步驟 1／9</div>
         <div id="wiz-hint"></div>
       </div>
       <div id="wiz-dots" aria-hidden="true"></div>
       <div id="wiz-body">
-        <div class="wiz-panel" data-step="1" id="panel-1"><h2>主題故事</h2><p class="hint">揀一個故事</p><div class="card-grid" id="grid-1"></div></div>
+        <div class="wiz-panel" data-step="1" id="panel-1"><h2>主題故事</h2><p class="hint">可揀 1–3 個（撳加 · 再撳減）</p><div class="card-grid" id="grid-1"></div></div>
         <div class="wiz-panel" data-step="2" id="panel-2"><h2>人物角色</h2><p class="hint">可揀 1–3 個（撳加 · 再撳減）</p><div class="card-grid" id="grid-2"></div></div>
-        <div class="wiz-panel" data-step="3" id="panel-3"><h2>場景環境</h2><p class="hint">喺邊度玩？</p><div class="card-grid" id="grid-3"></div></div>
-        <div class="wiz-panel" data-step="4" id="panel-4"><h2>色彩氛圍</h2><p class="hint">可揀 1–2 種感覺</p><div class="card-grid" id="grid-4"></div></div>
-        <div class="wiz-panel" data-step="5" id="panel-5"><h2>AI 元素</h2><p class="hint">可揀 1–2 個（撳加 · 再撳減）</p><div class="card-grid" id="grid-5"></div></div>
-        <div class="wiz-panel" data-step="6" id="panel-6"><h2>共融合作</h2><p class="hint">點樣一齊做？</p><div class="card-grid" id="grid-6"></div></div>
-        <div class="wiz-panel" data-step="7" id="panel-7">
+        <div class="wiz-panel" data-step="3" id="panel-3"><h2>場景環境</h2><p class="hint">可揀 1–3 個（撳加 · 再撳減）</p><div class="card-grid" id="grid-3"></div></div>
+        <div class="wiz-panel" data-step="4" id="panel-4"><h2>色彩氛圍</h2><p class="hint">可揀 1–3 個（撳加 · 再撳減）</p><div class="card-grid" id="grid-4"></div></div>
+        <div class="wiz-panel" data-step="5" id="panel-5"><h2>AI 元素</h2><p class="hint">可揀 1–3 個（撳加 · 再撳減）</p><div class="card-grid" id="grid-5"></div></div>
+        <div class="wiz-panel" data-step="6" id="panel-6"><h2>共融合作</h2><p class="hint">可揀 1–3 個（撳加 · 再撳減）</p><div class="card-grid" id="grid-6"></div></div>
+        <div class="wiz-panel" data-step="7" id="panel-7"><h2>藝術風格</h2><p class="hint">可揀 1–3 個（撳加 · 再撳減）</p><div class="card-grid" id="grid-7"></div></div>
+        <div class="wiz-panel" data-step="8" id="panel-8">
           <h2>文字同構圖</h2>
-          <p class="hint">標題 · 自訂字 · 先方向 · 後排位</p>
+          <p class="hint">標題可多選 · 自訂字 · 方向單選 · 排位單選</p>
           <div class="text-step">
             <div class="text-block">
-              <h3>① Banner 標題</h3>
+              <h3>① Banner 標題（可揀 1–3）</h3>
               <div class="card-grid" id="grid-title"></div>
             </div>
             <div class="field-wrap">
@@ -418,7 +419,7 @@
             </div>
           </div>
         </div>
-        <div class="wiz-panel" data-step="8" id="panel-8">
+        <div class="wiz-panel" data-step="9" id="panel-9">
           <h2>你的提詞</h2>
           <p class="hint">揀語言 · 複製去 AI 出圖</p>
           <div class="result-wrap">
@@ -451,16 +452,16 @@
 <script>
 (function () {
   'use strict';
-  // MARKER: F4.3-MUTE-TOGGLE
+  // MARKER: G4-HINT-MAX3
 
   var TEACH_N = 3;
-  var WIZ_N = 8;
-  var WIZ_READY = 8;
+  var WIZ_N = 9;
+  var WIZ_READY = 9;
 
   var STEPS = [
     null,
     {
-      key: 'story', title: '主題故事', mode: 'single',
+      key: 'story', title: '主題故事', mode: 'multi', max: 3,
       items: [
         { id: 's1', emoji: '😄', zh: '一齊開心', zhCn: '一起开心', en: 'everyone happy together playing sports' },
         { id: 's2', emoji: '🤝', zh: '互相幫助', zhCn: '互相帮助', en: 'students helping each other' },
@@ -482,7 +483,7 @@
       ]
     },
     {
-      key: 'scene', title: '場景環境', mode: 'single',
+      key: 'scene', title: '場景環境', mode: 'multi', max: 3,
       items: [
         { id: 'c1', emoji: '🏫', zh: '學校操場', zhCn: '学校操场', en: 'school playground outdoor sports field' },
         { id: 'c2', emoji: '🏟️', zh: '體育館', zhCn: '体育馆', en: 'bright indoor school gymnasium' },
@@ -493,7 +494,7 @@
       ]
     },
     {
-      key: 'color', title: '色彩氛圍', mode: 'multi', max: 2,
+      key: 'color', title: '色彩氛圍', mode: 'multi', max: 3,
       items: [
         { id: 'k1', emoji: '', zh: '綠+黃', zhCn: '绿+黄', en: 'fresh green and sunny yellow palette', css: 'linear-gradient(135deg,#22c55e,#eab308)' },
         { id: 'k2', emoji: '', zh: '藍+白', zhCn: '蓝+白', en: 'clean blue and white tech-fresh palette', css: 'linear-gradient(135deg,#38bdf8,#ffffff)' },
@@ -504,7 +505,7 @@
       ]
     },
     {
-      key: 'ai', title: 'AI 元素', mode: 'multi', max: 2,
+      key: 'ai', title: 'AI 元素', mode: 'multi', max: 3,
       items: [
         { id: 'a1', emoji: '🤖', zh: '圓機械人', zhCn: '圆机器人', en: 'cute round friendly robot' },
         { id: 'a2', emoji: '🤸', zh: '機械人運動', zhCn: '机器人运动', en: 'robots doing sports with children' },
@@ -515,7 +516,7 @@
       ]
     },
     {
-      key: 'include', title: '共融合作', mode: 'single',
+      key: 'include', title: '共融合作', mode: 'multi', max: 3,
       items: [
         { id: 'i1', emoji: '👥', zh: '混合一組', zhCn: '混合一组', en: 'mainstream and SEN students mixed in one team' },
         { id: 'i2', emoji: '🤲', zh: '互相扶持', zhCn: '互相扶持', en: 'students supporting each other kindly' },
@@ -523,6 +524,22 @@
         { id: 'i4', emoji: '🌟', zh: '人人參與', zhCn: '人人参与', en: 'everyone participates, speed does not matter' },
         { id: 'i5', emoji: '❤️', zh: '愛心握手', zhCn: '爱心握手', en: 'hearts stars handshake warm inclusion' },
         { id: 'i6', emoji: '😁', zh: '好多笑容', zhCn: '很多笑容', en: 'lots of happy smiles and joy' }
+      ]
+    },
+    {
+      key: 'style', title: '藝術風格', mode: 'multi', max: 3,
+      items: [
+        { id: 'st1', emoji: '🍃', zh: '吉卜力風', zhCn: '吉卜力风', en: 'Studio Ghibli inspired soft pastel watercolor, warm gentle light' },
+        { id: 'st2', emoji: '😊', zh: '可愛插畫', zhCn: '可爱插画', en: 'cute friendly children illustration' },
+        { id: 'st3', emoji: '🎨', zh: '水彩溫柔', zhCn: '水彩温柔', en: 'soft gentle watercolor painting' },
+        { id: 'st4', emoji: '🧁', zh: '粉彩童趣', zhCn: '粉彩童趣', en: 'pastel kids picture-book style' },
+        { id: 'st5', emoji: '🪧', zh: '平面海報', zhCn: '平面海报', en: 'flat bold poster graphic design' },
+        { id: 'st6', emoji: '⬜', zh: '簡潔現代', zhCn: '简洁现代', en: 'clean modern simple graphic' },
+        { id: 'st7', emoji: '🖍️', zh: '蠟筆手繪', zhCn: '蜡笔手绘', en: 'crayon hand-drawn childlike style' },
+        { id: 'st8', emoji: '🧸', zh: '黏土公仔', zhCn: '粘土公仔', en: 'cute claymation clay figure look' },
+        { id: 'st9', emoji: '📄', zh: '紙藝剪貼', zhCn: '纸艺剪贴', en: 'paper-cut collage craft style' },
+        { id: 'st10', emoji: '✏️', zh: '漫畫線稿', zhCn: '漫画线稿', en: 'clean comic line art with soft color fill' },
+        { id: 'st11', emoji: '✨', zh: '柔光動畫', zhCn: '柔光动画', en: 'soft-light 2D animation still frame' }
       ]
     }
   ];
@@ -556,7 +573,7 @@
   var pendingId = null;
   var pendingTag = null;
   var lang = 'zh';
-  var sel = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], title: [], orient: [], place: [] };
+  var sel = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], title: [], orient: [], place: [] };
   var customText = '';
   var lastPrompt = { zh: '', cn: '', en: '' };
 
@@ -725,6 +742,7 @@
     var color = findItems(4, sel[4]);
     var ai = findItems(5, sel[5]);
     var inc = findItems(6, sel[6]);
+    var style = findItems(7, sel[7]);
     var title = findTitle();
     var orient = findOrient();
     var place = findPlace();
@@ -741,11 +759,12 @@
     if (color.length) zhParts.push('色彩：' + joinZh(color, 'zh'));
     if (ai.length) zhParts.push('AI元素：' + joinZh(ai, 'zh'));
     if (inc.length) zhParts.push('共融：' + joinZh(inc, 'zh'));
+    if (style.length) zhParts.push('藝術風格：' + joinZh(style, 'zh'));
     if (title.length) zhParts.push('標題文字：' + joinZh(title, 'zh') + '（清晰可讀）');
     if (ct) zhParts.push('學生自訂文字：' + ct);
     if (orient.length) zhParts.push('方向：' + joinZh(orient, 'zh'));
     if (place.length) zhParts.push('排位：' + joinZh(place, 'zh'));
-    zhParts.push('風格：可愛友善插畫、綠黃白主調、開心孩子、小機械人、心形星星、安全寬闊空間。畫面避免雜亂小字牆。');
+    zhParts.push('整體：明亮正向、安全寬闊、開心孩子、小機械人、心形星星。畫面避免雜亂小字牆。');
 
     var cnParts = [openCn];
     if (story.length) cnParts.push('故事：' + joinZh(story, 'zhCn'));
@@ -754,11 +773,12 @@
     if (color.length) cnParts.push('色彩：' + joinZh(color, 'zhCn'));
     if (ai.length) cnParts.push('AI元素：' + joinZh(ai, 'zhCn'));
     if (inc.length) cnParts.push('共融：' + joinZh(inc, 'zhCn'));
+    if (style.length) cnParts.push('艺术风格：' + joinZh(style, 'zhCn'));
     if (title.length) cnParts.push('标题文字：' + joinZh(title, 'zhCn') + '（清晰可读）');
     if (ct) cnParts.push('学生自订文字：' + ct);
     if (orient.length) cnParts.push('方向：' + joinZh(orient, 'zhCn'));
     if (place.length) cnParts.push('排位：' + joinZh(place, 'zhCn'));
-    cnParts.push('风格：可爱友善插画、绿黄白主调、开心孩子、小机器人、心形星星、安全宽阔空间。画面避免杂乱小字墙。');
+    cnParts.push('整体：明亮正向、安全宽阔、开心孩子、小机器人、心形星星。画面避免杂乱小字墙。');
 
     var enParts = [openEn];
     if (story.length) enParts.push('story: ' + joinEn(story));
@@ -767,11 +787,12 @@
     if (color.length) enParts.push('colors: ' + joinEn(color));
     if (ai.length) enParts.push('AI elements: ' + joinEn(ai));
     if (inc.length) enParts.push('inclusion: ' + joinEn(inc));
+    if (style.length) enParts.push('art style: ' + joinEn(style));
     if (title.length) enParts.push('banner title text (clear readable): "' + joinEn(title) + '"');
     if (ct) enParts.push('student custom text on banner: "' + ct + '"');
     if (orient.length) enParts.push('orientation: ' + joinEn(orient));
     if (place.length) enParts.push('composition placement: ' + joinEn(place));
-    enParts.push('style: cute friendly illustration, green yellow white palette, happy children, small robots, hearts and stars, safe open space, clean design, no cluttered tiny text wall.');
+    enParts.push('overall: bright positive safe open space, happy children, small robots, hearts and stars, no cluttered tiny text wall.');
 
     lastPrompt.zh = zhParts.join('\n');
     lastPrompt.cn = cnParts.join('\n');
@@ -790,6 +811,7 @@
     addChip('', findItems(4, sel[4]));
     addChip('', findItems(5, sel[5]));
     addChip('', findItems(6, sel[6]));
+    addChip('', findItems(7, sel[7]));
     addChip('', findTitle());
     addChip('', findOrient());
     addChip('', findPlace());
@@ -917,10 +939,11 @@
   function renderChoiceGrid(gridId, items, selectedIds, stepTag, locked) {
     var grid = document.getElementById(gridId);
     if (!grid) return;
+    var isMultiTag = stepTag === 'title';
     var html = '';
     items.forEach(function (it) {
       var isSel = selectedIds.indexOf(it.id) !== -1;
-      var isPend = !locked && pendingId === it.id && wizStep === 7 && pendingTag === stepTag;
+      var isPend = !locked && !isMultiTag && pendingId === it.id && wizStep === 8 && pendingTag === stepTag;
       var cls = 'card' + (isSel ? ' selected' : '') + (isPend ? ' pending' : '') + (locked ? ' disabled' : '');
       html += '<button type="button" class="' + cls + '" data-id="' + it.id + '" data-tag="' + stepTag + '"' +
         (locked ? ' aria-disabled="true" data-locked="1"' : '') +
@@ -961,11 +984,30 @@
     if (btn.disabled) return;
     var id = btn.dataset.id;
     var tag = btn.dataset.tag;
-    if (wizStep !== 7) return;
+    if (wizStep !== 8) return;
     if (tag === 'place' && sel.orient.length === 0) {
       toast('請先揀方向');
       return;
     }
+
+    // title = multi max 3 (toggle)
+    if (tag === 'title') {
+      var tlist = sel.title.slice();
+      var tidx = tlist.indexOf(id);
+      if (tidx >= 0) tlist.splice(tidx, 1);
+      else {
+        if (tlist.length >= 3) { toast('最多揀 3 個'); return; }
+        tlist.push(id);
+      }
+      pendingId = null;
+      pendingTag = null;
+      sel.title = tlist;
+      renderStep7();
+      syncNav();
+      return;
+    }
+
+    // orient / place = single two-tap
     var list = sel[tag].slice();
     if (list.length === 1 && list[0] === id) {
       pendingId = null; pendingTag = null; renderStep7(); return;
@@ -1052,10 +1094,10 @@
     if (conf) {
       elHint.textContent = conf.title;
       renderGrid(wizStep);
-    } else if (wizStep === 7) {
+    } else if (wizStep === 8) {
       elHint.textContent = '文字同構圖';
       renderStep7();
-    } else if (wizStep === 8) {
+    } else if (wizStep === 9) {
       elHint.textContent = '提詞完成';
       renderResult();
     }
@@ -1081,9 +1123,9 @@
   }
 
   function canAdvanceWiz() {
-    if (wizStep === 8) return true;
-    if (wizStep === 7) return sel.title.length > 0 && sel.orient.length > 0 && sel.place.length > 0;
-    if (wizStep <= 6) return sel[wizStep] && sel[wizStep].length > 0;
+    if (wizStep === 9) return true;
+    if (wizStep === 8) return sel.title.length > 0 && sel.orient.length > 0 && sel.place.length > 0;
+    if (wizStep <= 7) return sel[wizStep] && sel[wizStep].length > 0;
     return false;
   }
 
@@ -1097,10 +1139,10 @@
     }
     btnPrev.disabled = false;
     btnPrev.textContent = wizStep === 1 ? '回教學' : '上一步';
-    if (wizStep === 8) {
+    if (wizStep === 9) {
       btnNext.textContent = '完成';
       btnNext.disabled = false;
-    } else if (wizStep === 7) {
+    } else if (wizStep === 8) {
       btnNext.textContent = '生成提詞';
       btnNext.disabled = !canAdvanceWiz();
     } else {
@@ -1121,12 +1163,12 @@
       goTeach(teachSlide + 1);
       return;
     }
-    if (wizStep === 8) {
+    if (wizStep === 9) {
       toast('提詞已備好，可複製');
       return;
     }
     if (!canAdvanceWiz()) {
-      toast(wizStep === 7 ? '請揀標題、方向同排位' : '請先揀至少一個');
+      toast(wizStep === 8 ? '請揀標題、方向同排位' : '請先揀至少一個');
       return;
     }
     showWizStep(wizStep + 1);
@@ -1152,7 +1194,7 @@
   buildTeachDots();
   buildWizDots();
   goTeach(0);
-  for (var s = 1; s <= 6; s++) renderGrid(s);
+  for (var s = 1; s <= 7; s++) renderGrid(s);
   var customInput = document.getElementById('customText');
   var btnSpeakCustom = document.getElementById('btnSpeakCustom');
   function syncCustomSpeakBtn() {
