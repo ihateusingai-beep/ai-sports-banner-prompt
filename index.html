@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>將軍澳培智學校 ｜ AI運動會 Banner 提詞器</title>
 <meta name="description" content="將軍澳培智學校 AI運動會 Banner 設計提詞器 — 教學引子 + 圖卡 wizard">
-<!-- MARKER: V2-SPLIT-TEXT-LAYOUT -->
-<!-- PREV: V1-WHO-SCENE-INCLUDE-IMG -->
-<!-- V2: split text vs layout into two steps -->
+<!-- MARKER: V5-VOCAB-EXPAND -->
+<!-- PREV: V2-SPLIT-TEXT-LAYOUT -->
+<!-- V5: story/who/include +4 each with JPG -->
 <style>
   :root {
     --green: #16a34a;
@@ -351,7 +351,7 @@
       <div class="school-zh">將軍澳培智學校</div>
       <div class="app-title">AI運動會 Banner 提詞器</div>
     </div>
-    <span class="badge" id="buildBadge">V2</span>
+    <span class="badge" id="buildBadge">V5</span>
     <button type="button" class="mute-btn" id="btnMute" aria-pressed="false" aria-label="靜音開關" title="靜音">🔊</button>
   </header>
 
@@ -467,7 +467,7 @@
 <script>
 (function () {
   'use strict';
-  // MARKER: V2-SPLIT-TEXT-LAYOUT
+  // MARKER: V5-VOCAB-EXPAND
 
   var TEACH_N = 3;
   var WIZ_N = 10;
@@ -483,7 +483,11 @@
         { id: 's3', emoji: '🤖', zh: 'AI運動', zhCn: 'AI运动', en: 'doing sports with friendly AI robots' },
         { id: 's4', emoji: '💪', zh: '勇敢試', zhCn: '勇敢尝试', en: 'bravely trying new sports challenges' },
         { id: 's5', emoji: '🏆', zh: '合作完成', zhCn: '合作完成', en: 'cooperating to finish a challenge together' },
-        { id: 's6', emoji: '🌈', zh: '人人參與', zhCn: '人人参与', en: 'everyone can join, no one left out' }
+        { id: 's6', emoji: '🌈', zh: '人人參與', zhCn: '人人参与', en: 'everyone can join, no one left out' },
+        { id: 's7', emoji: '👫', zh: '交朋友', zhCn: '交朋友', en: 'making new friends at sports day', img: 'img/story/s7.jpg' },
+        { id: 's8', emoji: '😂', zh: '一齊笑', zhCn: '一起笑', en: 'laughing happily together', img: 'img/story/s8.jpg' },
+        { id: 's9', emoji: '🔄', zh: '輪流玩', zhCn: '轮流玩', en: 'taking turns playing patiently', img: 'img/story/s9.jpg' },
+        { id: 's10', emoji: '✨', zh: '我做到', zhCn: '我做到', en: 'I can do it proud success moment', img: 'img/story/s10.jpg' }
       ]
     },
     {
@@ -494,7 +498,11 @@
         { id: 'w3', emoji: '🦯', zh: '手杖同學', zhCn: '手杖同学', en: 'a student with a walking aid', img: 'img/who/w3.jpg' },
         { id: 'w4', emoji: '🫂', zh: '手牽手', zhCn: '手牵手', en: 'students holding hands together', img: 'img/who/w4.jpg' },
         { id: 'w5', emoji: '🤖', zh: '小機械人', zhCn: '小机器人', en: 'a cute round smiling robot friend', img: 'img/who/w5.jpg' },
-        { id: 'w6', emoji: '👩‍🏫', zh: '老師鼓勵', zhCn: '老师鼓励', en: 'a kind teacher cheering beside them', img: 'img/who/w6.jpg' }
+        { id: 'w6', emoji: '👩‍🏫', zh: '老師鼓勵', zhCn: '老师鼓励', en: 'a kind teacher cheering beside them', img: 'img/who/w6.jpg' },
+        { id: 'w7', emoji: '🏫', zh: '姊妹校友', zhCn: '姊妹校友', en: 'friendly sister school visiting students', img: 'img/who/w7.jpg' },
+        { id: 'w8', emoji: '📣', zh: '拉拉隊', zhCn: '拉拉队', en: 'kids cheerleaders with pom-poms cheering', img: 'img/who/w8.jpg' },
+        { id: 'w9', emoji: '🏅', zh: '裁判老師', zhCn: '裁判老师', en: 'a friendly teacher referee with a soft whistle', img: 'img/who/w9.jpg' },
+        { id: 'w10', emoji: '🏃', zh: '接力隊伍', zhCn: '接力队伍', en: 'mixed relay team ready to pass a soft baton', img: 'img/who/w10.jpg' }
       ]
     },
     {
@@ -538,7 +546,11 @@
         { id: 'i3', emoji: '🔁', zh: '一齊做', zhCn: '一起做', en: 'doing the same action together', img: 'img/include/i3.jpg' },
         { id: 'i4', emoji: '🌟', zh: '人人參與', zhCn: '人人参与', en: 'everyone participates, speed does not matter', img: 'img/include/i4.jpg' },
         { id: 'i5', emoji: '❤️', zh: '愛心握手', zhCn: '爱心握手', en: 'hearts stars handshake warm inclusion', img: 'img/include/i5.jpg' },
-        { id: 'i6', emoji: '😁', zh: '好多笑容', zhCn: '很多笑容', en: 'lots of happy smiles and joy', img: 'img/include/i6.jpg' }
+        { id: 'i6', emoji: '😁', zh: '好多笑容', zhCn: '很多笑容', en: 'lots of happy smiles and joy', img: 'img/include/i6.jpg' },
+        { id: 'i7', emoji: '🐢', zh: '等慢嘅', zhCn: '等慢的', en: 'patiently waiting for slower friends kindly', img: 'img/include/i7.jpg' },
+        { id: 'i8', emoji: '👍', zh: '讚人', zhCn: '赞人', en: 'praising and encouraging friends with thumbs up', img: 'img/include/i8.jpg' },
+        { id: 'i9', emoji: '👏', zh: '一齊拍手', zhCn: '一起拍手', en: 'clapping hands together happily in a circle', img: 'img/include/i9.jpg' },
+        { id: 'i10', emoji: '🚶', zh: '扶住行', zhCn: '扶着走', en: 'gently helping a friend walk carefully arm in arm', img: 'img/include/i10.jpg' }
       ]
     },
     {
