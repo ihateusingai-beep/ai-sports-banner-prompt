@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>將軍澳培智學校 ｜ AI運動會 Banner 提詞器</title>
 <meta name="description" content="將軍澳培智學校 AI運動會 Banner 設計提詞器 — 教學引子 + 圖卡 wizard">
-<!-- MARKER: S3-STYLE-IMG -->
-<!-- PREV: G4-HINT-MAX3 -->
-<!-- S3: style cards use img samples -->
+<!-- MARKER: V1-WHO-SCENE-INCLUDE-IMG -->
+<!-- PREV: S3-STYLE-IMG -->
+<!-- V1: who/scene/include JPG samples -->
 <style>
   :root {
     --green: #16a34a;
@@ -351,7 +351,7 @@
       <div class="school-zh">將軍澳培智學校</div>
       <div class="app-title">AI運動會 Banner 提詞器</div>
     </div>
-    <span class="badge" id="buildBadge">S3</span>
+    <span class="badge" id="buildBadge">V1</span>
     <button type="button" class="mute-btn" id="btnMute" aria-pressed="false" aria-label="靜音開關" title="靜音">🔊</button>
   </header>
 
@@ -461,7 +461,7 @@
 <script>
 (function () {
   'use strict';
-  // MARKER: S3-STYLE-IMG
+  // MARKER: V1-WHO-SCENE-INCLUDE-IMG
 
   var TEACH_N = 3;
   var WIZ_N = 9;
@@ -483,23 +483,23 @@
     {
       key: 'who', title: '人物角色', mode: 'multi', max: 3,
       items: [
-        { id: 'w1', emoji: '👧👦', zh: '男女同學', zhCn: '男女同学', en: 'cheerful schoolboys and schoolgirls' },
-        { id: 'w2', emoji: '♿', zh: '輪椅同學', zhCn: '轮椅同学', en: 'a smiling student using a wheelchair' },
-        { id: 'w3', emoji: '🦯', zh: '手杖同學', zhCn: '手杖同学', en: 'a student with a walking aid' },
-        { id: 'w4', emoji: '🫂', zh: '手牽手', zhCn: '手牵手', en: 'students holding hands together' },
-        { id: 'w5', emoji: '🤖', zh: '小機械人', zhCn: '小机器人', en: 'a cute round smiling robot friend' },
-        { id: 'w6', emoji: '👩‍🏫', zh: '老師鼓勵', zhCn: '老师鼓励', en: 'a kind teacher cheering beside them' }
+        { id: 'w1', emoji: '👧👦', zh: '男女同學', zhCn: '男女同学', en: 'cheerful schoolboys and schoolgirls', img: 'img/who/w1.jpg' },
+        { id: 'w2', emoji: '♿', zh: '輪椅同學', zhCn: '轮椅同学', en: 'a smiling student using a wheelchair', img: 'img/who/w2.jpg' },
+        { id: 'w3', emoji: '🦯', zh: '手杖同學', zhCn: '手杖同学', en: 'a student with a walking aid', img: 'img/who/w3.jpg' },
+        { id: 'w4', emoji: '🫂', zh: '手牽手', zhCn: '手牵手', en: 'students holding hands together', img: 'img/who/w4.jpg' },
+        { id: 'w5', emoji: '🤖', zh: '小機械人', zhCn: '小机器人', en: 'a cute round smiling robot friend', img: 'img/who/w5.jpg' },
+        { id: 'w6', emoji: '👩‍🏫', zh: '老師鼓勵', zhCn: '老师鼓励', en: 'a kind teacher cheering beside them', img: 'img/who/w6.jpg' }
       ]
     },
     {
       key: 'scene', title: '場景環境', mode: 'multi', max: 3,
       items: [
-        { id: 'c1', emoji: '🏫', zh: '學校操場', zhCn: '学校操场', en: 'school playground outdoor sports field' },
-        { id: 'c2', emoji: '🏟️', zh: '體育館', zhCn: '体育馆', en: 'bright indoor school gymnasium' },
-        { id: 'c3', emoji: '🌿', zh: '綠草地', zhCn: '绿草地', en: 'green grass field under clear sky' },
-        { id: 'c4', emoji: '📺', zh: '大螢幕', zhCn: '大屏幕', en: 'big friendly score screen with hearts' },
-        { id: 'c5', emoji: '🎈', zh: '氣球星星', zhCn: '气球星星', en: 'colorful balloons and stars decorations' },
-        { id: 'c6', emoji: '⚽', zh: '有器材', zhCn: '有器材', en: 'simple sports gear balls and balance tools' }
+        { id: 'c1', emoji: '🏫', zh: '學校操場', zhCn: '学校操场', en: 'school playground outdoor sports field', img: 'img/scene/c1.jpg' },
+        { id: 'c2', emoji: '🏟️', zh: '體育館', zhCn: '体育馆', en: 'bright indoor school gymnasium', img: 'img/scene/c2.jpg' },
+        { id: 'c3', emoji: '🌿', zh: '綠草地', zhCn: '绿草地', en: 'green grass field under clear sky', img: 'img/scene/c3.jpg' },
+        { id: 'c4', emoji: '📺', zh: '大螢幕', zhCn: '大屏幕', en: 'big friendly score screen with hearts', img: 'img/scene/c4.jpg' },
+        { id: 'c5', emoji: '🎈', zh: '氣球星星', zhCn: '气球星星', en: 'colorful balloons and stars decorations', img: 'img/scene/c5.jpg' },
+        { id: 'c6', emoji: '⚽', zh: '有器材', zhCn: '有器材', en: 'simple sports gear balls and balance tools', img: 'img/scene/c6.jpg' }
       ]
     },
     {
@@ -527,12 +527,12 @@
     {
       key: 'include', title: '共融合作', mode: 'multi', max: 3,
       items: [
-        { id: 'i1', emoji: '👥', zh: '混合一組', zhCn: '混合一组', en: 'mainstream and SEN students mixed in one team' },
-        { id: 'i2', emoji: '🤲', zh: '互相扶持', zhCn: '互相扶持', en: 'students supporting each other kindly' },
-        { id: 'i3', emoji: '🔁', zh: '一齊做', zhCn: '一起做', en: 'doing the same action together' },
-        { id: 'i4', emoji: '🌟', zh: '人人參與', zhCn: '人人参与', en: 'everyone participates, speed does not matter' },
-        { id: 'i5', emoji: '❤️', zh: '愛心握手', zhCn: '爱心握手', en: 'hearts stars handshake warm inclusion' },
-        { id: 'i6', emoji: '😁', zh: '好多笑容', zhCn: '很多笑容', en: 'lots of happy smiles and joy' }
+        { id: 'i1', emoji: '👥', zh: '混合一組', zhCn: '混合一组', en: 'mainstream and SEN students mixed in one team', img: 'img/include/i1.jpg' },
+        { id: 'i2', emoji: '🤲', zh: '互相扶持', zhCn: '互相扶持', en: 'students supporting each other kindly', img: 'img/include/i2.jpg' },
+        { id: 'i3', emoji: '🔁', zh: '一齊做', zhCn: '一起做', en: 'doing the same action together', img: 'img/include/i3.jpg' },
+        { id: 'i4', emoji: '🌟', zh: '人人參與', zhCn: '人人参与', en: 'everyone participates, speed does not matter', img: 'img/include/i4.jpg' },
+        { id: 'i5', emoji: '❤️', zh: '愛心握手', zhCn: '爱心握手', en: 'hearts stars handshake warm inclusion', img: 'img/include/i5.jpg' },
+        { id: 'i6', emoji: '😁', zh: '好多笑容', zhCn: '很多笑容', en: 'lots of happy smiles and joy', img: 'img/include/i6.jpg' }
       ]
     },
     {
